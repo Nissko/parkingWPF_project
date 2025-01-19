@@ -22,6 +22,8 @@ namespace ParkingWork.ViewModels
     /// </summary>
     public class ParkingViewModel : INotifyPropertyChanged
     {
+        private string _filePath = $"C:\\GitHubRepositories\\parkingWPF_project\\DbFolder\\ParkingDB.xlsx";
+        
         // Collections
         public ObservableCollection<Parkings> ParkingsCompany { get; set; }
         public ObservableCollection<ParkingLots> ParkingLots { get; set; }
@@ -177,7 +179,7 @@ namespace ParkingWork.ViewModels
 
         private async Task LoadAttendantsFromExcel()
         {
-            var filePath = "C:\\UniversityFiles\\Курсовая работа ЯП\\ParkingWork\\DbFolder\\ParkingDB.xlsx";
+            var filePath = _filePath;
             if (File.Exists(filePath))
             {
                 var attendants = await _excelDataLoaderService.LoadAttendantsFromExcel(filePath);
@@ -191,7 +193,7 @@ namespace ParkingWork.ViewModels
 
         private async Task LoadOwnersFromExcel()
         {
-            var filePath = "C:\\UniversityFiles\\Курсовая работа ЯП\\ParkingWork\\DbFolder\\ParkingDB.xlsx";
+            var filePath = _filePath;
             if (File.Exists(filePath))
             {
                 var owners = await _excelDataLoaderService.LoadOwnersFromExcel(filePath);
@@ -205,7 +207,7 @@ namespace ParkingWork.ViewModels
 
         private async Task LoadParkingLotsFromExcel()
         {
-            var filePath = "C:\\UniversityFiles\\Курсовая работа ЯП\\ParkingWork\\DbFolder\\ParkingDB.xlsx";
+            var filePath = _filePath;
             if (File.Exists(filePath))
             {
                 var parkingLots = await _excelDataLoaderService.LoadParkingLotsFromExcel(filePath);
@@ -219,7 +221,7 @@ namespace ParkingWork.ViewModels
 
         private async Task LoadParkingFromExcel()
         {
-            var filePath = "C:\\UniversityFiles\\Курсовая работа ЯП\\ParkingWork\\DbFolder\\ParkingDB.xlsx";
+            var filePath = _filePath;
             if (File.Exists(filePath))
             {
                 var parkings = await _excelDataLoaderService.LoadParkingFromExcel(filePath);

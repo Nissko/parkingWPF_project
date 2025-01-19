@@ -8,7 +8,7 @@
             <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
 
             <TextBlock Text="Выберите стоянку:" />
-            <ComboBox ItemsSource="{Binding Attendants}" 
+            <ComboBox ItemsSource="{Binding Parkings}" 
                       SelectedItem="{Binding SelectedParking}" 
                       DisplayMemberPath="Name" 
                       Margin="0,0,0,10" />
