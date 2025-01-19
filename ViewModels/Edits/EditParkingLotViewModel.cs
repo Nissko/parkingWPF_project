@@ -50,7 +50,7 @@ namespace ParkingWork.ViewModels.Edits
             _parkingLotChange = parkingToChange;
             _parkingLotService = parkingService;
             ParkingLots = parkings;
-            
+
             Name = _parkingLotChange.Name;
             IsFree = _parkingLotChange.IsFree == true ? "Свободно" : "Занято";
             

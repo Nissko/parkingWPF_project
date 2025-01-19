@@ -54,6 +54,7 @@ namespace ParkingWork.ViewModels
         private readonly ParkingLotService _parkingLotService;
         private readonly OwnerService _ownerService;
         private readonly ExcelDataLoaderService _excelDataLoaderService;
+        private readonly ExcelDataSaverService _excelDataSaverService;
 
         public ParkingViewModel()
         {
@@ -69,12 +70,13 @@ namespace ParkingWork.ViewModels
             _parkingLotService = new ParkingLotService();
             _ownerService = new OwnerService();
             _excelDataLoaderService = new ExcelDataLoaderService();
+            _excelDataSaverService = new ExcelDataSaverService(_filePath);
 
             // ADD Events
-            _attendantService.AttendantAdded += attendant => Attendants.Add(attendant);
-            _parkingService.ParkingAdded += parking => ParkingsCompany.Add(parking);
-            _parkingLotService.ParkingLotAdded += parkingLot => ParkingLots.Add(parkingLot);
-            _ownerService.OwnerAdded += owner => Owners.Add(owner);
+            _attendantService.AttendantAdded += attendant => OnAttendantAdded(attendant);;
+            _parkingService.ParkingAdded += parking => OnParkingAdded(parking);
+            _parkingLotService.ParkingLotAdded += parkingLot => OnParkingLotAdded(parkingLot);
+            _ownerService.OwnerAdded += owner => OnOwnerAdded(owner);
 
             // EDIT Events
             // TODO: предусмотреть изменения в других коллекциях (проверить)
@@ -397,9 +399,43 @@ namespace ParkingWork.ViewModels
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected void OnPropertyChanged(string propertyName)
+        private async void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            await _excelDataSaverService.SaveDataToExcelAsync(Owners, ParkingsCompany, ParkingLots, Attendants);
         }
+
+        #region Обработчик событий ADD
+
+        private async void OnAttendantAdded(Attendants attendant)
+        {
+            Attendants.Add(attendant);
+            await SaveDataToExcelAsync();
+        }
+
+        private async void OnParkingAdded(Parkings parking)
+        {
+            ParkingsCompany.Add(parking);
+            await SaveDataToExcelAsync();
+        }
+
+        private async void OnParkingLotAdded(ParkingLots parkingLot)
+        {
+            ParkingLots.Add(parkingLot);
+            await SaveDataToExcelAsync();
+        }
+
+        private async void OnOwnerAdded(Owners owner)
+        {
+            Owners.Add(owner);
+            await SaveDataToExcelAsync();
+        }
+
+        private async Task SaveDataToExcelAsync()
+        {
+            await _excelDataSaverService.SaveDataToExcelAsync(Owners, ParkingsCompany, ParkingLots, Attendants);
+        }
+
+        #endregion
     }
 }

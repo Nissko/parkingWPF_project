@@ -1,6 +1,7 @@
 ﻿<Window x:Class="ParkingWork.Windows.Edits.EditParkingLotWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
         Title="Изменить парковочное место" Height="300" Width="400">
     <Grid Margin="10">
         <StackPanel>
@@ -9,8 +10,12 @@
             
             <TextBlock Text="Доступность:" />
             <ComboBox SelectedItem="{Binding IsFree, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10">
-                <ComboBoxItem Content="Свободно" />
-                <ComboBoxItem Content="Занято" />
+                <ComboBox.ItemsSource>
+                    <x:Array Type="{x:Type system:String}">
+                        <system:String>Свободно</system:String>
+                        <system:String>Занято</system:String>
+                    </x:Array>
+                </ComboBox.ItemsSource>
             </ComboBox>
             
             <Button Content="Изменить" Command="{Binding ChangeCommand}" Width="100" HorizontalAlignment="Right" />
