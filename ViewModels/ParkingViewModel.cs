@@ -40,6 +40,7 @@ namespace ParkingWork.ViewModels
         public ICommand EditParkingCompanyCommand { get; }
         public ICommand EditParkingLotCommand { get; }
         public ICommand EditAttendantCommand { get; }
+        public ICommand EditOwnerCommand { get; }
 
         // Save Commands
         public ICommand SaveToExcelCommand { get; }
@@ -90,14 +91,11 @@ namespace ParkingWork.ViewModels
 
                 ParkingsCompany = updatedList;
                 OnPropertyChanged(nameof(ParkingsCompany));
-                
+
                 //Update ParkingLotsCollection
                 var updatedParkingLotsList = new ObservableCollection<ParkingLots>(ParkingLots.Select(parkingLot =>
                 {
-                    if (parkingLot.ParkingId == parking.Id)
-                    {
-                        parkingLot.ChangeParkingName(parking.Name);
-                    }
+                    if (parkingLot.ParkingId == parking.Id) parkingLot.ChangeParkingName(parking.Name);
                     return parkingLot;
                 }));
 
@@ -131,19 +129,49 @@ namespace ParkingWork.ViewModels
 
                 ParkingLots = updatedList;
                 OnPropertyChanged(nameof(ParkingLots));
-                
+
                 //Update ParkingLotsCollection
                 var updatedParkingLotsList = new ObservableCollection<ParkingLots>(ParkingLots.Select(parkingLot =>
                 {
-                    if (parkingLot.ParkingId == parking.Id)
-                    {
-                        parkingLot.ChangeParkingName(parking.Name);
-                    }
+                    if (parkingLot.ParkingId == parking.Id) parkingLot.ChangeParkingName(parking.Name);
                     return parkingLot;
                 }));
 
                 ParkingLots = updatedParkingLotsList;
                 OnPropertyChanged(nameof(ParkingLots));
+            };
+            _ownerService.OwnerChanged += owner =>
+            {
+                if (owner == null) return;
+
+                var updatedList = new ObservableCollection<Owners>(Owners);
+
+                var existingOwner = updatedList.FirstOrDefault(o => o.Id == owner.Id);
+                if (existingOwner != null)
+                {
+                    // Обновляем данные существующего владельца
+                    existingOwner.ChangeOwner(owner.Name, owner.Surname, owner.Patronymic, owner.Address, owner.Phone,
+                        owner.Vehicles);
+
+                    // Обновляем автомобили владельца
+                    foreach (var newVehicle in owner.Vehicles)
+                    {
+                        var existingVehicle = existingOwner.Vehicles.FirstOrDefault(v => v.Id == newVehicle.Id);
+                        if (existingVehicle != null)
+                            existingVehicle.ChangeVehicle(newVehicle.LicensePlate, newVehicle.Brand, newVehicle.Model,
+                                newVehicle.Color);
+                        else
+                            existingOwner.Vehicles.Append(newVehicle);
+                    }
+                }
+                else
+                {
+                    updatedList.Add(owner);
+                }
+
+                Owners = updatedList;
+
+                OnPropertyChanged(nameof(Owners));
             };
 
             // Init Add Commands 
@@ -156,6 +184,7 @@ namespace ParkingWork.ViewModels
             EditParkingCompanyCommand = new RelayCommand(EditParkingCompanyFunction);
             EditParkingLotCommand = new RelayCommand(EditParkingLotFunction);
             EditAttendantCommand = new RelayCommand(EditAttendantFunction);
+            EditOwnerCommand = new RelayCommand(EditOwnerFunction);
 
             // Init Save Commands
             SaveToExcelCommand = new RelayCommand(SaveToExcel);
@@ -304,7 +333,7 @@ namespace ParkingWork.ViewModels
         }
 
         /// <summary>
-        /// окно для изменения инф. о кладвщике
+        /// окно для изменения инф. о кладощике
         /// </summary>
         private void EditAttendantFunction(object parameter)
         {
@@ -313,10 +342,19 @@ namespace ParkingWork.ViewModels
             var window = new EditAttendantWindow(viewModel);
             window.ShowDialog();
         }
+        
+        /// <summary>
+        /// окно для изменения инф. о клиенте
+        /// </summary>
+        private void EditOwnerFunction(object parameter)
+        {
+            if (!(parameter is Owners owner)) return;
+            var viewModel = new EditOwnerViewModel(owner, _ownerService, Owners);
+            var window = new EditOwnerWindow(viewModel);
+            window.ShowDialog();
+        }
 
         #endregion
-        
-        
 
         /// <summary>
         /// Сохранить данные в Excel

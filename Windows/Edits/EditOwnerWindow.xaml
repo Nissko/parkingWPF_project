@@ -1,7 +1,8 @@
-﻿<Window x:Class="ParkingWork.Windows.Adds.AddOwnerWindow"
+﻿<Window x:Class="ParkingWork.Windows.Edits.EditOwnerWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Добавить нового клиента" Width="400">
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        Title="Изменить информацию о клиенте" Width="400">
     <Grid Margin="10">
         <StackPanel>
             <TextBlock Text="Информация о клиенте:" FontWeight="Bold" Margin="0, 0, 0,15" />
@@ -22,6 +23,9 @@
 
             <TextBlock Text="Информация об автомобилях:" FontWeight="Bold" Margin="0, 15, 0,15" />
             
+            <TextBlock Text="Ид:" Visibility="Collapsed" />
+            <TextBox Text="{Binding CarId, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" IsEnabled="False" Visibility="Collapsed" />
+            
             <TextBlock Text="Марка:" />
             <TextBox Text="{Binding Brand, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
             
@@ -34,7 +38,7 @@
             <TextBlock Text="Цвет авто:" />
             <ComboBox SelectedItem="{Binding SelectedColor}" Margin="0,0,0,10">
                 <ComboBox.ItemsSource>
-                    <x:Array Type="{x:Type sys:String}" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                    <x:Array Type="{x:Type sys:String}">
                         <sys:String>Red</sys:String>
                         <sys:String>Blue</sys:String>
                         <sys:String>Green</sys:String>
@@ -46,9 +50,8 @@
                 </ComboBox.ItemsSource>
             </ComboBox>
             
-            <Button Content="Добавить авто" Command="{Binding AddCarCommand}" Width="100" HorizontalAlignment="Right" Margin="0, 10, 0, 0" />
-
-            <ListBox ItemsSource="{Binding Cars}" Margin="0, 20, 0, 10">
+            <Button Content="Сохранить изменения авто" Command="{Binding SaveCarCommand}" Width="100" HorizontalAlignment="Right" Margin="0, 10, 0, 0" />
+            <ListBox ItemsSource="{Binding Cars}" SelectedItem="{Binding SelectedCar}" Margin="0, 20, 0, 10">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal" Margin="5">
@@ -60,8 +63,8 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-
-            <Button Content="Сохранить" Command="{Binding SaveCommand}" Width="100" HorizontalAlignment="Right" />
+            
+            <Button Content="Сохранить" Command="{Binding ChangeCommand}" Width="100" HorizontalAlignment="Right" />
             <Button Content="Назад" Command="{Binding RedirectBackCommand}" Width="100" HorizontalAlignment="Right" Margin="0, 10, 0, 0" />
         </StackPanel>
     </Grid>

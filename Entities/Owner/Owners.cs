@@ -48,5 +48,16 @@ namespace ParkingWork.Entities.Owner
             }
         }
 
+        /*Функция для изменения Owner*/
+        public void ChangeOwner(string newName, string newSurname, string newPatronymic, string newAddress,
+            string newPhone, IEnumerable<Vehicles> newVehicles)
+        {
+            Name = newName ?? Name;
+            Surname = newSurname ?? Surname;
+            Patronymic = newPatronymic ?? Patronymic;
+            Address = newAddress ?? Address;
+            Phone = newPhone ?? Phone;
+            Vehicles = newVehicles ?? Vehicles;
+        }
     }
 }

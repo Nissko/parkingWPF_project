@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using ParkingWork.Entities.Owner;
 using ParkingWork.Entities.Vehicle;
@@ -9,6 +10,7 @@ namespace ParkingWork.Services
     public class OwnerService
     {
         public event Action<Owners> OwnerAdded;
+        public event Action<Owners> OwnerChanged;
 
         public void AddOwner(Guid clientId, string name, string surname, string patronymic, string address, string phone, IEnumerable<Vehicles> cars)
         {
@@ -22,6 +24,12 @@ namespace ParkingWork.Services
             var newOwner = new Owners(clientId, name, surname, patronymic, address, phone, vehiclesEnumerable);
             
             OwnerAdded?.Invoke(newOwner);
+        }
+
+        public void ChangeOwner(ObservableCollection<Owners> owners, Guid id)
+        {
+            var ownersList = owners.FirstOrDefault(x => x.Id == id);
+            OwnerChanged?.Invoke(ownersList);
         }
     }
 }

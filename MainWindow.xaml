@@ -37,7 +37,7 @@
                                 <!-- Кнопки управления -->
                                 <StackPanel>
                                     <Button Width="100" Padding="5" Content="Изменить" HorizontalAlignment="Left"
-                                            Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=TabItem}}"
+                                            Command="{Binding DataContext.EditOwnerCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                             CommandParameter="{Binding}" Margin="5" />
                                 </StackPanel>
                             </StackPanel>

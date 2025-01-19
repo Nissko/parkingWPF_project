@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using ParkingWork.Entities.Vehicle.Enum;
 
 namespace ParkingWork.Entities.Vehicle
@@ -24,5 +26,13 @@ namespace ParkingWork.Entities.Vehicle
         public string Brand {  get; private set; }
         public string Model { get; private set; }
         public VehicleColorEnums Color { get; private set; }
+
+        public void ChangeVehicle(string licensePlate, string brand, string model, VehicleColorEnums color)
+        {
+            LicensePlate = licensePlate ?? LicensePlate;
+            Brand = brand ?? Brand;
+            Model = model ?? Model;
+            Color = color;
+        }
     }
 }

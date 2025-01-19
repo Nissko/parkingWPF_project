@@ -100,3 +100,5 @@ C:\GitHubRepositories\parkingWPF_project\obj\Debug\ParkingWork.csproj.CoreCompil
 C:\GitHubRepositories\parkingWPF_project\obj\Debug\ParkingW.4C09AFAA.Up2Date
 C:\GitHubRepositories\parkingWPF_project\obj\Debug\ParkingWork.exe
 C:\GitHubRepositories\parkingWPF_project\obj\Debug\ParkingWork.pdb
+C:\GitHubRepositories\parkingWPF_project\obj\Debug\Windows\Edits\EditOwnerWindow.baml
+C:\GitHubRepositories\parkingWPF_project\obj\Debug\Windows\Edits\EditOwnerWindow.g.cs

@@ -109,6 +109,7 @@
     <Compile Include="ViewModels\Adds\AddParkingLotViewModel.cs" />
     <Compile Include="ViewModels\Adds\AddParkingViewModel.cs" />
     <Compile Include="ViewModels\Edits\EditAttendantViewModel.cs" />
+    <Compile Include="ViewModels\Edits\EditOwnerViewModel.cs" />
     <Compile Include="ViewModels\Edits\EditParkingLotViewModel.cs" />
     <Compile Include="ViewModels\Edits\EditParkingViewModel.cs" />
     <Compile Include="ViewModels\ParkingViewModel.cs" />
@@ -128,6 +129,9 @@
     </Compile>
     <Compile Include="Windows\Edits\EditAttendantWindow.xaml.cs">
       <DependentUpon>EditAttendantWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Edits\EditOwnerWindow.xaml.cs">
+      <DependentUpon>EditOwnerWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\Edits\EditParkingLotWindow.xaml.cs">
       <DependentUpon>EditParkingLotWindow.xaml</DependentUpon>
@@ -160,6 +164,7 @@
     <Page Include="Windows\Adds\AddParkingLotWindow.xaml" />
     <Page Include="Windows\Adds\AddParkingWindow.xaml" />
     <Page Include="Windows\Edits\EditAttendantWindow.xaml" />
+    <Page Include="Windows\Edits\EditOwnerWindow.xaml" />
     <Page Include="Windows\Edits\EditParkingLotWindow.xaml" />
     <Page Include="Windows\Edits\EditParkingWindow.xaml" />
   </ItemGroup>
