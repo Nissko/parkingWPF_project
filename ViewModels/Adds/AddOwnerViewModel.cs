@@ -52,6 +52,7 @@ namespace ParkingWork.ViewModels.Adds
             }
         }
         
+        /*TODO: исправить вывод на ComboBox*/
         private VehicleColorEnums _selectedColor;
         public VehicleColorEnums SelectedColor
         {

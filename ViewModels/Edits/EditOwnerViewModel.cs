@@ -13,14 +13,12 @@ namespace ParkingWork.ViewModels.Edits
 {
     public class EditOwnerViewModel : INotifyPropertyChanged
     {
-        // Свойства владельца
         public string Surname { get; set; }
         public string Name { get; set; }
         public string Patronymic { get; set; }
         public string Address { get; set; }
         public string Phone { get; set; }
 
-        // Список машин
         public ObservableCollection<Vehicles> Cars { get; set; } = new ObservableCollection<Vehicles>();
 
         private Vehicles _selectedCar;
@@ -38,6 +36,7 @@ namespace ParkingWork.ViewModels.Edits
                     Model = _selectedCar.Model;
                     LicensePlate = _selectedCar.LicensePlate;
                     SelectedColor = _selectedCar.Color;
+                    SelectedColorString = SelectedColor.ToString();
                 }
 
                 OnPropertyChanged(nameof(SelectedCar));
@@ -103,6 +102,22 @@ namespace ParkingWork.ViewModels.Edits
                 OnPropertyChanged(nameof(SelectedColor));
             }
         }
+        
+        private string _selectedColorString;
+
+        public string SelectedColorString
+        {
+            get => _selectedColor.ToString();
+            set
+            {
+                if (_selectedColorString != value)
+                {
+                    _selectedColorString = value;
+                    SelectedColor = (VehicleColorEnums)Enum.Parse(typeof(VehicleColorEnums), _selectedColorString);
+                    OnPropertyChanged(nameof(SelectedColorString));
+                }
+            }
+        }
 
         public ICommand ChangeCommand { get; }
         public ICommand RedirectBackCommand { get; }
@@ -119,17 +134,14 @@ namespace ParkingWork.ViewModels.Edits
             _ownerService = ownerService;
             OwnersList = owners;
 
-            // Загружаем данные владельца
             Surname = ownerChange.Surname;
             Name = ownerChange.Name;
             Patronymic = ownerChange.Patronymic;
             Address = ownerChange.Address;
             Phone = ownerChange.Phone;
 
-            // Загружаем машины
             foreach (var vehicle in ownerChange.Vehicles) Cars.Add(vehicle);
 
-            // Команды
             ChangeCommand = new RelayCommand(Change);
             RedirectBackCommand = new RelayCommand(RedirectBack);
             SaveCarCommand = new RelayCommand(SaveCarChanges);
@@ -163,7 +175,6 @@ namespace ParkingWork.ViewModels.Edits
                     string.IsNullOrEmpty(Address) || string.IsNullOrEmpty(Phone) || Cars.Count == 0)
                     throw new Exception("Поля не могут быть пустыми");
 
-                // Сохраняем изменения владельца
                 OwnersList.FirstOrDefault(t => t.Id == _ownerChange.Id)
                     ?.ChangeOwner(Name, Surname, Patronymic, Address, Phone, Cars);
 

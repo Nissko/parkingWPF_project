@@ -1,7 +1,7 @@
 ﻿<Window x:Class="ParkingWork.Windows.Edits.EditOwnerWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
         Title="Изменить информацию о клиенте" Width="400">
     <Grid Margin="10">
         <StackPanel>
@@ -36,16 +36,16 @@
             <TextBox Text="{Binding LicensePlate, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
             
             <TextBlock Text="Цвет авто:" />
-            <ComboBox SelectedItem="{Binding SelectedColor}" Margin="0,0,0,10">
+            <ComboBox SelectedItem="{Binding SelectedColorString}" Margin="0,0,0,10">
                 <ComboBox.ItemsSource>
-                    <x:Array Type="{x:Type sys:String}">
-                        <sys:String>Red</sys:String>
-                        <sys:String>Blue</sys:String>
-                        <sys:String>Green</sys:String>
-                        <sys:String>BlueGreen</sys:String>
-                        <sys:String>GreenYellow</sys:String>
-                        <sys:String>BlueYellowGreen</sys:String>
-                        <sys:String>GreenYellowGreen</sys:String>
+                    <x:Array Type="{x:Type system:String}">
+                        <system:String>Red</system:String>
+                        <system:String>Blue</system:String>
+                        <system:String>Green</system:String>
+                        <system:String>BlueGreen</system:String>
+                        <system:String>GreenYellow</system:String>
+                        <system:String>BlueYellowGreen</system:String>
+                        <system:String>GreenYellowGreen</system:String>
                     </x:Array>
                 </ComboBox.ItemsSource>
             </ComboBox>
