@@ -1,0 +1,68 @@
+﻿<Window x:Class="ParkingWork.Windows.Adds.AddOwnerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Добавить нового клиента" Width="400">
+    <Grid Margin="10">
+        <StackPanel>
+            <TextBlock Text="Информация о клиенте:" FontWeight="Bold" Margin="0, 0, 0,15" />
+            <TextBlock Text="Фамилия:" />
+            <TextBox Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
+            
+            <TextBlock Text="Имя:" />
+            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
+            
+            <TextBlock Text="Отчество:" />
+            <TextBox Text="{Binding Patronymic, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
+            
+            <TextBlock Text="Адрес прописки:" />
+            <TextBox Text="{Binding IsFree, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
+            
+            <TextBlock Text="Номер телефона:" />
+            <TextBox Text="{Binding Phone, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
+
+            <TextBlock Text="Информация об автомобилях:" FontWeight="Bold" Margin="0, 15, 0,15" />
+            
+            <TextBlock Text="Марка:" />
+            <TextBox Text="{Binding Brand, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
+            
+            <TextBlock Text="Модель:" />
+            <TextBox Text="{Binding Model, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
+            
+            <TextBlock Text="Гос. номер авто:" />
+            <TextBox Text="{Binding LicensePlate, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
+            
+            <TextBlock Text="Цвет авто:" />
+            <ComboBox SelectedItem="{Binding SelectedColor}" Margin="0,0,0,10">
+                <ComboBox.ItemsSource>
+                    <x:Array Type="{x:Type sys:String}" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                        <sys:String>Red</sys:String>
+                        <sys:String>Blue</sys:String>
+                        <sys:String>Green</sys:String>
+                        <sys:String>BlueGreen</sys:String>
+                        <sys:String>GreenYellow</sys:String>
+                        <sys:String>BlueYellowGreen</sys:String>
+                        <sys:String>GreenYellowGreen</sys:String>
+                    </x:Array>
+                </ComboBox.ItemsSource>
+            </ComboBox>
+            
+            <Button Content="Добавить авто" Command="{Binding AddCarCommand}" Width="100" HorizontalAlignment="Right" Margin="0, 10, 0, 0" />
+
+            <ListBox ItemsSource="{Binding Cars}" Margin="0, 20, 0, 10">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" Margin="5">
+                            <TextBlock Text="{Binding Brand}" Margin="5" />
+                            <TextBlock Text="{Binding Model}" Margin="5" />
+                            <TextBlock Text="{Binding LicensePlate}" Margin="5" />
+                            <TextBlock Text="{Binding Color}" Margin="5" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <Button Content="Сохранить" Command="{Binding SaveCommand}" Width="100" HorizontalAlignment="Right" />
+            <Button Content="Назад" Command="{Binding RedirectBackCommand}" Width="100" HorizontalAlignment="Right" Margin="0, 10, 0, 0" />
+        </StackPanel>
+    </Grid>
+</Window>

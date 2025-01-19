@@ -1,0 +1,115 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\UniversityFiles\\\u041A\u0443\u0440\u0441\u043E\u0432\u0430\u044F \u0440\u0430\u0431\u043E\u0442\u0430 \u042F\u041F\\ParkingWork\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{1A5EA1A8-270D-4CDC-8429-4AAF51578582}|ParkingWork.csproj|c:\\universityfiles\\\u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F \u0440\u0430\u0431\u043E\u0442\u0430 \u044F\u043F\\parkingwork\\entities\\owner\\owner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1A5EA1A8-270D-4CDC-8429-4AAF51578582}|ParkingWork.csproj|solutionrelative:entities\\owner\\owner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A5EA1A8-270D-4CDC-8429-4AAF51578582}|ParkingWork.csproj|c:\\universityfiles\\\u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F \u0440\u0430\u0431\u043E\u0442\u0430 \u044F\u043F\\parkingwork\\entities\\vehicle\\vehicle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1A5EA1A8-270D-4CDC-8429-4AAF51578582}|ParkingWork.csproj|solutionrelative:entities\\vehicle\\vehicle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A5EA1A8-270D-4CDC-8429-4AAF51578582}|ParkingWork.csproj|c:\\universityfiles\\\u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F \u0440\u0430\u0431\u043E\u0442\u0430 \u044F\u043F\\parkingwork\\entities\\vehicle\\enums\\vehiclecolorenum.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1A5EA1A8-270D-4CDC-8429-4AAF51578582}|ParkingWork.csproj|solutionrelative:entities\\vehicle\\enums\\vehiclecolorenum.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A5EA1A8-270D-4CDC-8429-4AAF51578582}|ParkingWork.csproj|c:\\universityfiles\\\u043A\u0443\u0440\u0441\u043E\u0432\u0430\u044F \u0440\u0430\u0431\u043E\u0442\u0430 \u044F\u043F\\parkingwork\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{1A5EA1A8-270D-4CDC-8429-4AAF51578582}|ParkingWork.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A5EA1A8-270D-4CDC-8429-4AAF51578582}|ParkingWork.csproj|C:\\UniversityFiles\\\u041A\u0443\u0440\u0441\u043E\u0432\u0430\u044F \u0440\u0430\u0431\u043E\u0442\u0430 \u042F\u041F\\ParkingWork\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1A5EA1A8-270D-4CDC-8429-4AAF51578582}|ParkingWork.csproj|solutionrelative:mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "VehicleColorEnum.cs",
+              "DocumentMoniker": "C:\\UniversityFiles\\\u041A\u0443\u0440\u0441\u043E\u0432\u0430\u044F \u0440\u0430\u0431\u043E\u0442\u0430 \u042F\u041F\\ParkingWork\\Entities\\Vehicle\\Enums\\VehicleColorEnum.cs",
+              "RelativeDocumentMoniker": "Entities\\Vehicle\\Enums\\VehicleColorEnum.cs",
+              "ToolTip": "C:\\UniversityFiles\\\u041A\u0443\u0440\u0441\u043E\u0432\u0430\u044F \u0440\u0430\u0431\u043E\u0442\u0430 \u042F\u041F\\ParkingWork\\Entities\\Vehicle\\Enums\\VehicleColorEnum.cs",
+              "RelativeToolTip": "Entities\\Vehicle\\Enums\\VehicleColorEnum.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-12T10:29:39.4Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d84ee353-0bef-5a41-a649-8f89aca5d84d}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Owner.cs",
+              "DocumentMoniker": "C:\\UniversityFiles\\\u041A\u0443\u0440\u0441\u043E\u0432\u0430\u044F \u0440\u0430\u0431\u043E\u0442\u0430 \u042F\u041F\\ParkingWork\\Entities\\Owner\\Owner.cs",
+              "RelativeDocumentMoniker": "Entities\\Owner\\Owner.cs",
+              "ToolTip": "C:\\UniversityFiles\\\u041A\u0443\u0440\u0441\u043E\u0432\u0430\u044F \u0440\u0430\u0431\u043E\u0442\u0430 \u042F\u041F\\ParkingWork\\Entities\\Owner\\Owner.cs",
+              "RelativeToolTip": "Entities\\Owner\\Owner.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-12T10:23:58.306Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Vehicle.cs",
+              "DocumentMoniker": "C:\\UniversityFiles\\\u041A\u0443\u0440\u0441\u043E\u0432\u0430\u044F \u0440\u0430\u0431\u043E\u0442\u0430 \u042F\u041F\\ParkingWork\\Entities\\Vehicle\\Vehicle.cs",
+              "RelativeDocumentMoniker": "Entities\\Vehicle\\Vehicle.cs",
+              "ToolTip": "C:\\UniversityFiles\\\u041A\u0443\u0440\u0441\u043E\u0432\u0430\u044F \u0440\u0430\u0431\u043E\u0442\u0430 \u042F\u041F\\ParkingWork\\Entities\\Vehicle\\Vehicle.cs",
+              "RelativeToolTip": "Entities\\Vehicle\\Vehicle.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-12T09:46:07.361Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "C:\\UniversityFiles\\\u041A\u0443\u0440\u0441\u043E\u0432\u0430\u044F \u0440\u0430\u0431\u043E\u0442\u0430 \u042F\u041F\\ParkingWork\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "MainWindow.xaml",
+              "ToolTip": "C:\\UniversityFiles\\\u041A\u0443\u0440\u0441\u043E\u0432\u0430\u044F \u0440\u0430\u0431\u043E\u0442\u0430 \u042F\u041F\\ParkingWork\\MainWindow.xaml",
+              "RelativeToolTip": "MainWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-01-12T09:39:43.181Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "MainWindow.xaml.cs",
+              "DocumentMoniker": "C:\\UniversityFiles\\\u041A\u0443\u0440\u0441\u043E\u0432\u0430\u044F \u0440\u0430\u0431\u043E\u0442\u0430 \u042F\u041F\\ParkingWork\\MainWindow.xaml.cs",
+              "RelativeDocumentMoniker": "MainWindow.xaml.cs",
+              "ToolTip": "C:\\UniversityFiles\\\u041A\u0443\u0440\u0441\u043E\u0432\u0430\u044F \u0440\u0430\u0431\u043E\u0442\u0430 \u042F\u041F\\ParkingWork\\MainWindow.xaml.cs",
+              "RelativeToolTip": "MainWindow.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-12T09:39:39.324Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
