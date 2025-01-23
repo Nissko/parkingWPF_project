@@ -9,6 +9,7 @@ using System.Windows.Input;
 using ParkingWork.Entities.Attendants;
 using ParkingWork.Entities.Owner;
 using ParkingWork.Entities.Parking;
+using ParkingWork.Entities.Parking.Receipt;
 using ParkingWork.Services;
 using ParkingWork.ViewModels.Adds;
 using ParkingWork.ViewModels.Edits;
@@ -23,62 +24,97 @@ namespace ParkingWork.ViewModels
     public class ParkingViewModel : INotifyPropertyChanged
     {
         private string _filePath = $"C:\\GitHubRepositories\\parkingWPF_project\\DbFolder\\ParkingDB.xlsx";
+
+        #region Коллекции
         
-        // Collections
         public ObservableCollection<Parkings> ParkingsCompany { get; set; }
         public ObservableCollection<ParkingLots> ParkingLots { get; set; }
         public ObservableCollection<Owners> Owners { get; set; }
         public ObservableCollection<Attendants> Attendants { get; set; }
+        public ObservableCollection<Receipts> Receipts { get; set; }
+        
+        #endregion
 
-        // Add Commands
+        #region Команды
+
+        #region Команды на добавление
+
         public ICommand AddOwnerCommand { get; }
         public ICommand AddAttendantCommand { get; }
         public ICommand AddParkingCompanyCommand { get; }
         public ICommand AddParkingLotCommand { get; }
+        public ICommand AddReceiptCommand { get; }
 
-        // Edit Commands
+        #endregion
+
+        #region Команды на изменение
+
         public ICommand EditParkingCompanyCommand { get; }
         public ICommand EditParkingLotCommand { get; }
         public ICommand EditAttendantCommand { get; }
         public ICommand EditOwnerCommand { get; }
 
-        // Save Commands
+        #endregion
+
+        #region Команды на сохранение
+
         public ICommand SaveToExcelCommand { get; }
         public ICommand SaveToTextFileCommand { get; }
         public ICommand PrintCommand { get; }
+
+        #endregion
+        
         public ICommand CloseApplicationCommand { get; }
 
-        // Services
+        #endregion
+
+        #region Сервисы
+
         private readonly AttendantService _attendantService;
         private readonly ParkingService _parkingService;
         private readonly ParkingLotService _parkingLotService;
         private readonly OwnerService _ownerService;
         private readonly ExcelDataLoaderService _excelDataLoaderService;
         private readonly ExcelDataSaverService _excelDataSaverService;
+        private readonly ReceiptService _receiptService;
 
+        #endregion
+        
         public ParkingViewModel()
         {
-            // Init collections
+            #region Инициализация коллекций
+
             ParkingsCompany = new ObservableCollection<Parkings>();
             ParkingLots = new ObservableCollection<ParkingLots>();
             Owners = new ObservableCollection<Owners>();
             Attendants = new ObservableCollection<Attendants>();
 
-            // Init services
+            #endregion
+
+            #region Инициализация сервисов
+
             _attendantService = new AttendantService();
             _parkingService = new ParkingService();
             _parkingLotService = new ParkingLotService();
             _ownerService = new OwnerService();
+            //TODO: добавить _filePath
             _excelDataLoaderService = new ExcelDataLoaderService();
             _excelDataSaverService = new ExcelDataSaverService(_filePath);
+            _receiptService = new ReceiptService();
 
-            // ADD Events
+            #endregion
+
+            #region Подписание на события добавления
+
             _attendantService.AttendantAdded += attendant => OnAttendantAdded(attendant);;
             _parkingService.ParkingAdded += parking => OnParkingAdded(parking);
             _parkingLotService.ParkingLotAdded += parkingLot => OnParkingLotAdded(parkingLot);
             _ownerService.OwnerAdded += owner => OnOwnerAdded(owner);
 
-            // EDIT Events
+            #endregion
+
+            #region Подписание на события изменения
+
             // TODO: предусмотреть изменения в других коллекциях (проверить)
             _parkingService.ParkingChanged += parking =>
             {
@@ -94,7 +130,7 @@ namespace ParkingWork.ViewModels
                 ParkingsCompany = updatedList;
                 OnPropertyChanged(nameof(ParkingsCompany));
 
-                //Update ParkingLotsCollection
+                //Обновление коллекции с парковочными местами
                 var updatedParkingLotsList = new ObservableCollection<ParkingLots>(ParkingLots.Select(parkingLot =>
                 {
                     if (parkingLot.ParkingId == parking.Id) parkingLot.ChangeParkingName(parking.Name);
@@ -132,7 +168,7 @@ namespace ParkingWork.ViewModels
                 ParkingLots = updatedList;
                 OnPropertyChanged(nameof(ParkingLots));
 
-                //Update ParkingLotsCollection
+                //Обновление коллекции с парковочными местами
                 var updatedParkingLotsList = new ObservableCollection<ParkingLots>(ParkingLots.Select(parkingLot =>
                 {
                     if (parkingLot.ParkingId == parking.Id) parkingLot.ChangeParkingName(parking.Name);
@@ -151,11 +187,11 @@ namespace ParkingWork.ViewModels
                 var existingOwner = updatedList.FirstOrDefault(o => o.Id == owner.Id);
                 if (existingOwner != null)
                 {
-                    // Обновляем данные существующего владельца
+                    // Обновление данных существующего владельца
                     existingOwner.ChangeOwner(owner.Name, owner.Surname, owner.Patronymic, owner.Address, owner.Phone,
                         owner.Vehicles);
 
-                    // Обновляем автомобили владельца
+                    // Обновление автомобилей владельца
                     foreach (var newVehicle in owner.Vehicles)
                     {
                         var existingVehicle = existingOwner.Vehicles.FirstOrDefault(v => v.Id == newVehicle.Id);
@@ -176,29 +212,41 @@ namespace ParkingWork.ViewModels
                 OnPropertyChanged(nameof(Owners));
             };
 
-            // Init Add Commands 
+            #endregion
+
+            #region Инициализация команд добавления
+
             AddOwnerCommand = new RelayCommand(OpenAddOwnerWindow);
             AddAttendantCommand = new RelayCommand(OpenAddAttendantWindow);
             AddParkingCompanyCommand = new RelayCommand(OpenAddParkingCompanyWindow);
             AddParkingLotCommand = new RelayCommand(OpenAddParkingLotWindow);
+            AddReceiptCommand = new RelayCommand(OpedAddReceiptWindow);
 
-            // Init Edit Commands
+            #endregion
+
+            #region Инициализация команд изменения
+            
             EditParkingCompanyCommand = new RelayCommand(EditParkingCompanyFunction);
             EditParkingLotCommand = new RelayCommand(EditParkingLotFunction);
             EditAttendantCommand = new RelayCommand(EditAttendantFunction);
             EditOwnerCommand = new RelayCommand(EditOwnerFunction);
 
-            // Init Save Commands
+            #endregion
+            
+            #region Инициализация команд сохранения
+
             SaveToExcelCommand = new RelayCommand(SaveToExcel);
             SaveToTextFileCommand = new RelayCommand(SaveToTextFile);
             PrintCommand = new RelayCommand(Print);
             CloseApplicationCommand = new RelayCommand(CloseApplication);
 
-            // Load Excel Data
+            #endregion
+            
+            //Предзагрузка данных из Excel
             _ = LoadExcelDatas();
         }
 
-        #region Preload Data from Excel
+        #region Предзагрузка данных из Excel
 
         private async Task LoadExcelDatas()
         {
@@ -266,10 +314,10 @@ namespace ParkingWork.ViewModels
 
         #endregion
 
-        #region Add Commands
+        #region Функции для команд добавления
 
         /// <summary>
-        ///     Окно для добавления клиентов
+        /// Окно для добавления клиентов
         /// </summary>
         private void OpenAddOwnerWindow(object parameter)
         {
@@ -279,7 +327,7 @@ namespace ParkingWork.ViewModels
         }
 
         /// <summary>
-        ///     окно для добавления кладовщика
+        /// окно для добавления кладовщика
         /// </summary>
         private void OpenAddAttendantWindow(object parameter)
         {
@@ -289,7 +337,7 @@ namespace ParkingWork.ViewModels
         }
 
         /// <summary>
-        ///     окно для добавления стоянки
+        /// окно для добавления стоянки
         /// </summary>
         private void OpenAddParkingCompanyWindow(object parameter)
         {
@@ -299,7 +347,7 @@ namespace ParkingWork.ViewModels
         }
 
         /// <summary>
-        ///     окно для добавления парковочного места
+        /// окно для добавления парковочного места
         /// </summary>
         private void OpenAddParkingLotWindow(object parameter)
         {
@@ -308,9 +356,20 @@ namespace ParkingWork.ViewModels
             window.ShowDialog();
         }
 
+        /// <summary>
+        /// окно для добавления квитанции
+        /// </summary>
+        private void OpedAddReceiptWindow(object parameter)
+        {
+            var viewModel = new AddReceiptViewModel(_receiptService, Receipts, ParkingsCompany, ParkingLots, Owners,
+                Attendants);
+            var window = new AddReceiptWindow(viewModel);
+            window.ShowDialog();
+        }
+
         #endregion
 
-        #region Edit Commands
+        #region Функции для команд изменения
 
         /// <summary>
         /// окно для изменения инф. о стоянке
@@ -389,6 +448,9 @@ namespace ParkingWork.ViewModels
             Console.WriteLine("Print executed");
         }
 
+        /// <summary>
+        /// Закрытие приложения
+        /// </summary>
         private void CloseApplication(object parameter)
         {
             Application.Current.Shutdown();

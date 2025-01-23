@@ -8,10 +8,10 @@ namespace ParkingWork.Entities.Owner
     /// <summary>
     /// Клиенты / Владельцы
     /// </summary>
-    public class Owners
+    public class Owners : Person
     {
         public Owners(Guid id, string name, string surname, string patronymic, string address, string phone,
-        IEnumerable<Vehicles> vehicles)
+        IEnumerable<Vehicles> vehicles) : base(name, surname, patronymic)
         {
             Id = id;
             Name = name;
@@ -23,9 +23,7 @@ namespace ParkingWork.Entities.Owner
         }
 
         public Guid Id { get; private set; }
-        public string Name { get; private  set; }
-        public string Surname { get; private  set; }
-        public string Patronymic { get; private  set; }
+        
         public string Address { get; private  set; }
         public string Phone { get; private  set; }
         public IEnumerable<Vehicles> Vehicles { get; set; }

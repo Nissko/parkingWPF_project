@@ -102,3 +102,5 @@ C:\GitHubRepositories\parkingWPF_project\obj\Debug\ParkingWork.exe
 C:\GitHubRepositories\parkingWPF_project\obj\Debug\ParkingWork.pdb
 C:\GitHubRepositories\parkingWPF_project\obj\Debug\Windows\Edits\EditOwnerWindow.baml
 C:\GitHubRepositories\parkingWPF_project\obj\Debug\Windows\Edits\EditOwnerWindow.g.cs
+C:\GitHubRepositories\parkingWPF_project\obj\Debug\Windows\Adds\AddReceiptWindow.baml
+C:\GitHubRepositories\parkingWPF_project\obj\Debug\Windows\Adds\AddReceiptWindow.g.cs

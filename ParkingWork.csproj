@@ -99,16 +99,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Entities\Person.cs" />
     <Compile Include="Services\AttendantService.cs" />
     <Compile Include="Services\ExcelDataLoaderService.cs" />
     <Compile Include="Services\ExcelDataSaverService.cs" />
     <Compile Include="Services\OwnerService.cs" />
     <Compile Include="Services\ParkingLotService.cs" />
     <Compile Include="Services\ParkingService.cs" />
+    <Compile Include="Services\ReceiptService.cs" />
     <Compile Include="ViewModels\Adds\AddAttendantViewModel.cs" />
     <Compile Include="ViewModels\Adds\AddOwnerViewModel.cs" />
     <Compile Include="ViewModels\Adds\AddParkingLotViewModel.cs" />
     <Compile Include="ViewModels\Adds\AddParkingViewModel.cs" />
+    <Compile Include="ViewModels\Adds\AddReceiptViewModel.cs" />
     <Compile Include="ViewModels\Edits\EditAttendantViewModel.cs" />
     <Compile Include="ViewModels\Edits\EditOwnerViewModel.cs" />
     <Compile Include="ViewModels\Edits\EditParkingLotViewModel.cs" />
@@ -127,6 +130,9 @@
     </Compile>
     <Compile Include="Windows\Adds\AddParkingWindow.xaml.cs">
       <DependentUpon>AddParkingWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Adds\AddReceiptWindow.xaml.cs">
+      <DependentUpon>AddReceiptWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\Edits\EditAttendantWindow.xaml.cs">
       <DependentUpon>EditAttendantWindow.xaml</DependentUpon>
@@ -148,7 +154,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Entities\Attendants\Attendants.cs" />
+    <Compile Include="Entities\Attendant\Attendants.cs" />
     <Compile Include="Entities\Owner\Owners.cs" />
     <Compile Include="Entities\Parking\ParkingLots.cs" />
     <Compile Include="Entities\Parking\Parkings.cs" />
@@ -164,6 +170,7 @@
     <Page Include="Windows\Adds\AddOwnerWindow.xaml" />
     <Page Include="Windows\Adds\AddParkingLotWindow.xaml" />
     <Page Include="Windows\Adds\AddParkingWindow.xaml" />
+    <Page Include="Windows\Adds\AddReceiptWindow.xaml" />
     <Page Include="Windows\Edits\EditAttendantWindow.xaml" />
     <Page Include="Windows\Edits\EditOwnerWindow.xaml" />
     <Page Include="Windows\Edits\EditParkingLotWindow.xaml" />

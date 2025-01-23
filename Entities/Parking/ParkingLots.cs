@@ -8,14 +8,6 @@ namespace ParkingWork.Entities.Parking
     /// </summary>
     public class ParkingLots
     {
-        public ParkingLots(Guid id, Guid parkingId, string name, bool isFree)
-        {
-            Id = id;
-            ParkingId = parkingId;
-            Name = name;
-            IsFree = isFree;
-        }
-        
         /// <summary>
         /// Для вывода во вкладке "Парковочные места"
         /// </summary>

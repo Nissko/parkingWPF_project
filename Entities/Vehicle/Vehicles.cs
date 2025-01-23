@@ -1,6 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using ParkingWork.Entities.Vehicle.Enum;
 
 namespace ParkingWork.Entities.Vehicle
