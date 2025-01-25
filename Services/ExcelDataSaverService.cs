@@ -70,7 +70,7 @@ namespace ParkingWork.Services
             sheet.Cells[1, 1].Value = "Id";
             sheet.Cells[1, 2].Value = "Name";
             sheet.Cells[1, 3].Value = "Address";
-            sheet.Cells[1, 3].Value = "Inn";
+            sheet.Cells[1, 4].Value = "Inn";
 
             for (int i = 0; i < parkings.Count; i++)
             {
