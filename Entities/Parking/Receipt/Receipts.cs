@@ -9,7 +9,7 @@ namespace ParkingWork.Entities.Parking.Receipt
     public class Receipts
     {
         public Receipts(string series, string number, Owners owner, Parkings parking,
-            ParkingLots parkingLot, Attendants.Attendants attendants, int days, decimal price)
+            ParkingLots parkingLot, Attendants.Attendants attendants, int days, decimal price, Guid selectedCarId)
         {
             Id = Guid.NewGuid();
             Series = series;
@@ -20,8 +20,10 @@ namespace ParkingWork.Entities.Parking.Receipt
             Attendants = attendants;
             Days = days;
             _price = price;
-            StartDate = DateTime.Parse(DateTime.Now.ToString("dd.MM.yyyy"));
+            StartDate = DateTime.Now;
             EndDate = StartDate.AddDays(days);
+            _selectedCarId = selectedCarId;
+            CalculateAmount(_price);
         }
 
         public Guid Id { get; set; }
@@ -76,18 +78,25 @@ namespace ParkingWork.Entities.Parking.Receipt
         /// </summary>
         private decimal _price;
         public decimal Price => _price;
-        
+
         /// <summary>
         /// Стоимость
         /// </summary>
-        private decimal Amount { get; set; }
+        private decimal _amount;
+        public decimal Amount => _amount;
+
+        /// <summary>
+        /// Id выбранного авто
+        /// </summary>
+        private Guid _selectedCarId;
+        public Guid SelectedCarId => _selectedCarId;
 
         /// <summary>
         /// Расчет стоимости
         /// </summary>
         public void CalculateAmount(decimal dailyRate)
         {
-            Amount = Days * dailyRate;
+            _amount = Days * dailyRate;
         }
     }
 }

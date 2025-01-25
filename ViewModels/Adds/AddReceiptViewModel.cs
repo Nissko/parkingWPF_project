@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using ParkingWork.Entities.Attendants;
@@ -196,7 +197,7 @@ namespace ParkingWork.ViewModels.Adds
                 }
 
                 var preloadReceipt = new Receipts("A", "000001", SelectedOwner, SelectedParking, SelectedParkingLot,
-                    SelectedAttendant, Days, Price);
+                    SelectedAttendant, Days, Price, SelectedVehicle.Id);
 
                 var replacements = new Dictionary<string, string>
                 {
@@ -204,6 +205,26 @@ namespace ParkingWork.ViewModels.Adds
                     { "<ADDRESSPARKING>", preloadReceipt.Parking.Address },
                     { "<SERIES>", preloadReceipt.Series },
                     { "<NUMBER>", preloadReceipt.Number },
+                    { "<PARKINGLOT>", preloadReceipt.ParkingLot.Name },
+                    
+                    { "<CARBRAND>", preloadReceipt.Owner.Vehicles.FirstOrDefault(t=>t.Id == preloadReceipt.SelectedCarId)?.Brand },
+                    { "<CARMODEL>", preloadReceipt.Owner.Vehicles.FirstOrDefault(t=>t.Id == preloadReceipt.SelectedCarId)?.Model },
+                    { "<LICENSEPLATE>", preloadReceipt.Owner.Vehicles.FirstOrDefault(t=>t.Id == preloadReceipt.SelectedCarId)?.LicensePlate },
+                    
+                    { "<FIOOWNER>", preloadReceipt.Owner.FullNameInLine },
+                    { "<ADDRESSOWNER>", preloadReceipt.Owner.Address },
+                    { "<PHONEOWNER>", preloadReceipt.Owner.Phone },
+                    
+                    { "<STARTDATE>", preloadReceipt.StartDate.ToShortDateString() },
+                    { "<SHOUR>", preloadReceipt.StartDate.ToString("HH") },
+                    { "<SMINE>", preloadReceipt.StartDate.ToString("mm") },
+                    { "<STARTPARK>", preloadReceipt.StartDate.ToString("dd.MM.yyyy") },
+                    { "<ENDPARK>", preloadReceipt.EndDate.ToString("dd.MM.yyyy") },
+                    
+                    { "<FIOATTENDANT>", preloadReceipt.Attendants.FullNameInLine },
+                    
+                    { "<DAYS>", preloadReceipt.Days.ToString() },
+                    { "<AMOUNT>", preloadReceipt.Amount.ToString() },
                 };
                 
                 var wordService = new WordService();

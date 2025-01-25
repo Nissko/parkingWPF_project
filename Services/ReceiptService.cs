@@ -11,7 +11,7 @@ namespace ParkingWork.Services
         public event Action<Receipts> ReceiptAdded;
 
         public void AddReceipt(string series, string number, Owners owner, Parkings parking, ParkingLots parkingLot,
-            Attendants attendant, int days, decimal price)
+            Attendants attendant, int days, decimal price, Guid selectedCarId)
         {
             if (string.IsNullOrEmpty(series) || string.IsNullOrEmpty(number) || string.IsNullOrEmpty(days.ToString()) ||
                 string.IsNullOrEmpty(price.ToString()) || owner == null || parking == null || parkingLot == null ||
@@ -21,7 +21,7 @@ namespace ParkingWork.Services
             }
 
             var newReceipt = new Receipts(series: series, number: number, owner: owner, parking: parking,
-                parkingLot: parkingLot, attendants: attendant, days: days, price: price);
+                parkingLot: parkingLot, attendants: attendant, days: days, price: price, selectedCarId: selectedCarId);
 
             ReceiptAdded?.Invoke(newReceipt);
         }
