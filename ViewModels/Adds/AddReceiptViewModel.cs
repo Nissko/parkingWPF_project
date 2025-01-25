@@ -1,13 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using ParkingWork.Entities.Attendants;
 using ParkingWork.Entities.Owner;
 using ParkingWork.Entities.Parking;
 using ParkingWork.Entities.Parking.Receipt;
+using ParkingWork.Entities.Vehicle;
 using ParkingWork.Services;
+using ParkingWork.Windows.Adds;
 
 namespace ParkingWork.ViewModels.Adds
 {
@@ -17,6 +21,8 @@ namespace ParkingWork.ViewModels.Adds
         private int _days;
         private Parkings _selectedParking;
         private ParkingLots _selectedParkingLot;
+        private Owners _selectedOwner;
+        private Vehicles _selectedVehicle;
 
         public decimal Price
         {
@@ -50,7 +56,12 @@ namespace ParkingWork.ViewModels.Adds
         /// </summary>
         public ObservableCollection<ParkingLots> AvailableParkingLots { get; set; }
         public ObservableCollection<Owners> Owners { get; set; }
+        /// <summary>
+        /// Список автомобилей клиента
+        /// </summary>
+        public ObservableCollection<Vehicles> AvailableOwnerCars { get; set; }
         public ObservableCollection<Attendants> Attendants { get; set; }
+        public ObservableCollection<Vehicles> Vehicles { get; set; }
 
         /*Выбранные значения*/
         public Parkings SelectedParking
@@ -74,7 +85,27 @@ namespace ParkingWork.ViewModels.Adds
             }
         }
 
-        public Owners SelectedOwner { get; set; }
+        public Owners SelectedOwner
+        {
+            get => _selectedOwner;
+            set
+            {
+                _selectedOwner = value;
+                OnPropertyChanged(nameof(SelectedOwner));
+                LoadAvailableOwnerCars();
+            }
+        }
+        
+        public Vehicles SelectedVehicle
+        {
+            get => _selectedVehicle;
+            set
+            {
+                _selectedVehicle = value;
+                OnPropertyChanged(nameof(SelectedVehicle));
+            }
+        }
+
         public Attendants SelectedAttendant { get; set; }
 
         public ICommand SaveCommand { get; }
@@ -85,7 +116,8 @@ namespace ParkingWork.ViewModels.Adds
 
         public AddReceiptViewModel(ReceiptService receiptService, ObservableCollection<Receipts> receiptsList,
             ObservableCollection<Parkings> parkingsList, ObservableCollection<ParkingLots> parkingLotsList,
-            ObservableCollection<Owners> ownersList, ObservableCollection<Attendants> attendantsList)
+            ObservableCollection<Owners> ownersList, ObservableCollection<Attendants> attendantsList,
+            ObservableCollection<Vehicles> vehiclesList)
         {
             _receiptService = receiptService;
             Receipts = receiptsList;
@@ -93,7 +125,9 @@ namespace ParkingWork.ViewModels.Adds
             ParkingLots = parkingLotsList;
             AvailableParkingLots = new ObservableCollection<ParkingLots>(); // Пустой список по умолчанию
             Owners = ownersList;
+            AvailableOwnerCars = new ObservableCollection<Vehicles>();
             Attendants = attendantsList;
+            Vehicles = vehiclesList;
 
             SaveCommand = new RelayCommand(Save);
             RedirectBackCommand = new RelayCommand(RedirectBack);
@@ -118,18 +152,30 @@ namespace ParkingWork.ViewModels.Adds
                 }
             }
         }
+        
+        private void LoadAvailableOwnerCars()
+        {
+            AvailableOwnerCars.Clear();
+
+            if (SelectedOwner != null)
+            {
+                // Фильтруем места, которые относятся к выбранной стоянке и свободны
+                foreach (var car in Vehicles)
+                {
+                    if (car.ClientId == SelectedOwner.Id)
+                    {
+                        AvailableOwnerCars.Add(car);
+                    }
+                }
+            }
+        }
 
         private void Save(object parameter)
         {
             try
             {
-                if (SelectedParking == null || SelectedParkingLot == null || SelectedOwner == null || SelectedAttendant == null)
-                {
-                    MessageBox.Show("Пожалуйста, заполните все поля.", "Указаны не все данные!");
-                    return;
-                }
-
-                _receiptService.AddReceipt(
+                //TODO: сделать все поля до конца
+                /*_receiptService.AddReceipt(
                     series: "1",
                     number: "000001",
                     owner: SelectedOwner,
@@ -139,11 +185,37 @@ namespace ParkingWork.ViewModels.Adds
                     days: Days,
                     price: Price
                 );
+                MessageBox.Show("Квитанция успешно создана!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);*/
 
-                MessageBox.Show("Квитанция успешно создана!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                if (SelectedParking == null || SelectedParkingLot == null || SelectedOwner == null ||
+                    SelectedAttendant == null || SelectedVehicle == null || string.IsNullOrEmpty(Days.ToString()) ||
+                    Price <= 0)
+                {
+                    MessageBox.Show("Пожалуйста, заполните все поля.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
 
+                var preloadReceipt = new Receipts("A", "000001", SelectedOwner, SelectedParking, SelectedParkingLot,
+                    SelectedAttendant, Days, Price);
+
+                var replacements = new Dictionary<string, string>
+                {
+                    { "<PARKINGNAME>", preloadReceipt.Parking.Name },
+                    { "<ADDRESSPARKING>", preloadReceipt.Parking.Address },
+                    { "<SERIES>", preloadReceipt.Series },
+                    { "<NUMBER>", preloadReceipt.Number },
+                };
+                
+                var wordService = new WordService();
+                var outputWordPath = wordService.GenerateReceipt(replacements);
+                var outputPath = wordService.ConvertWordToPdf(outputWordPath);
+
+                var currentWindow = Application.Current.Windows[1] as AddReceiptWindow;
+                currentWindow?.ShowPdfInWebBrowser(outputPath);
+                
+                
                 // Закрытие окна
-                Application.Current.Windows[1]?.Close();
+                //Application.Current.Windows[1]?.Close();
             }
             catch (ArgumentException ex)
             {

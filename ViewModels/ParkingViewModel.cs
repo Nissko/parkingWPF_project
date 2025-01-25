@@ -10,6 +10,7 @@ using ParkingWork.Entities.Attendants;
 using ParkingWork.Entities.Owner;
 using ParkingWork.Entities.Parking;
 using ParkingWork.Entities.Parking.Receipt;
+using ParkingWork.Entities.Vehicle;
 using ParkingWork.Services;
 using ParkingWork.ViewModels.Adds;
 using ParkingWork.ViewModels.Edits;
@@ -32,6 +33,7 @@ namespace ParkingWork.ViewModels
         public ObservableCollection<Owners> Owners { get; set; }
         public ObservableCollection<Attendants> Attendants { get; set; }
         public ObservableCollection<Receipts> Receipts { get; set; }
+        public ObservableCollection<Vehicles> Vehicles { get; set; }
         
         #endregion
 
@@ -88,6 +90,8 @@ namespace ParkingWork.ViewModels
             ParkingLots = new ObservableCollection<ParkingLots>();
             Owners = new ObservableCollection<Owners>();
             Attendants = new ObservableCollection<Attendants>();
+            Receipts = new ObservableCollection<Receipts>();
+            Vehicles = new ObservableCollection<Vehicles>();
 
             #endregion
 
@@ -191,7 +195,7 @@ namespace ParkingWork.ViewModels
                     existingOwner.ChangeOwner(owner.Name, owner.Surname, owner.Patronymic, owner.Address, owner.Phone,
                         owner.Vehicles);
 
-                    // Обновление автомобилей владельца
+                    // Обновление автомобилей владельца (Owners)
                     foreach (var newVehicle in owner.Vehicles)
                     {
                         var existingVehicle = existingOwner.Vehicles.FirstOrDefault(v => v.Id == newVehicle.Id);
@@ -201,6 +205,20 @@ namespace ParkingWork.ViewModels
                         else
                             existingOwner.Vehicles.Append(newVehicle);
                     }
+                    
+                    //Обновление коллекции с авто (Vehicles)
+                    var updatedVehiclesList = new ObservableCollection<Vehicles>(Vehicles.Select(vehicle =>
+                    {
+                        var existingVehicle = existingOwner.Vehicles.FirstOrDefault(v => v.Id == vehicle.Id);
+
+                        if (existingVehicle != null)
+                            vehicle.ChangeVehicle(existingVehicle.LicensePlate, existingVehicle.Brand, existingVehicle.Model,
+                                existingVehicle.Color);
+                        
+                        return vehicle;
+                    }));
+
+                    Vehicles = updatedVehiclesList;
                 }
                 else
                 {
@@ -254,6 +272,7 @@ namespace ParkingWork.ViewModels
             await LoadOwnersFromExcel();
             await LoadParkingLotsFromExcel();
             await LoadParkingFromExcel();
+            await LoadVehiclesFromExcel();
         }
 
         private async Task LoadAttendantsFromExcel()
@@ -312,6 +331,20 @@ namespace ParkingWork.ViewModels
             }
         }
 
+        private async Task LoadVehiclesFromExcel()
+        {
+            var filePath = _filePath;
+            if (File.Exists(filePath))
+            {
+                var vehicles = await _excelDataLoaderService.LoadVehicleFromExcel(filePath);
+                foreach (var vehicle in vehicles) Vehicles.Add(vehicle);
+            }
+            else
+            {
+                MessageBox.Show("Файл Excel не найден.", "Ошибка");
+            }
+        }
+
         #endregion
 
         #region Функции для команд добавления
@@ -362,7 +395,7 @@ namespace ParkingWork.ViewModels
         private void OpedAddReceiptWindow(object parameter)
         {
             var viewModel = new AddReceiptViewModel(_receiptService, Receipts, ParkingsCompany, ParkingLots, Owners,
-                Attendants);
+                Attendants, Vehicles);
             var window = new AddReceiptWindow(viewModel);
             window.ShowDialog();
         }

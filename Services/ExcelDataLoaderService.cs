@@ -327,5 +327,63 @@ namespace ParkingWork.Services
         }
 
         #endregion
+
+        #region Vehicles
+
+        public async Task<List<Vehicles>> LoadVehicleFromExcel(string filePath)
+        {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            
+            var vehicles = new List<Vehicles>();
+
+            try
+            {
+                using (var package = new ExcelPackage(new FileInfo(filePath)))
+                {
+                    var listName = "Vehicles";
+                    
+                    var worksheet = package.Workbook.Worksheets.FirstOrDefault(ws => ws.Name == listName);
+
+                    if (worksheet == null)
+                    {
+                        MessageBox.Show($"Лист с именем '{listName}' не найден", "Ошибка");
+                        return vehicles;
+                    }
+                    
+                    int rowCount = worksheet.Dimension.Rows;
+
+                    for (int row = 2; row <= rowCount; row++)
+                    {
+                        var id = worksheet.Cells[row, 1].Text; // Идентификатор
+                        var clientId = worksheet.Cells[row, 2].Text; // Клиент
+                        var licensePlate = worksheet.Cells[row, 3].Text; // Номер авто
+                        var brand = worksheet.Cells[row, 4].Text; // Бренд авто
+                        var model = worksheet.Cells[row, 5].Text; // Модель авто
+                        var color = worksheet.Cells[row, 6].Text; // Цвет авто
+
+                        if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(clientId) ||
+                            string.IsNullOrEmpty(licensePlate) || string.IsNullOrEmpty(brand) ||
+                            string.IsNullOrEmpty(model) || string.IsNullOrEmpty(color)) 
+                            continue;
+
+                        var intColor = int.Parse(color);
+                        var colorEnum = (VehicleColorEnums)intColor;
+
+                        var vehicle = new Vehicles(Guid.Parse(id), Guid.Parse(clientId), licensePlate, brand, model,
+                            colorEnum);
+
+                        vehicles.Add(vehicle);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при загрузке данных из Excel: {ex.Message}",$"Ошибка");
+            }
+
+            return vehicles;
+        }
+
+        #endregion
     }
 }

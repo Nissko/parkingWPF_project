@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using DocumentFormat.OpenXml.Wordprocessing;
 using ParkingWork.Entities.Vehicle.Enum;
 
 namespace ParkingWork.Entities.Vehicle
@@ -24,6 +26,19 @@ namespace ParkingWork.Entities.Vehicle
         public string Brand {  get; private set; }
         public string Model { get; private set; }
         public VehicleColorEnums Color { get; private set; }
+        
+        public string StringCarInfoInLine
+        {
+            get
+            {
+                var toStringCarInfo = new List<string>
+                {
+                    $"| {Brand} | {Model} | {LicensePlate} |",
+                };
+
+                return string.Join(Environment.NewLine, toStringCarInfo);
+            }
+        }
 
         public void ChangeVehicle(string licensePlate, string brand, string model, VehicleColorEnums color)
         {
