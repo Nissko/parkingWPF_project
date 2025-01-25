@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Numerics;
 using System.Windows;
 using System.Windows.Input;
 using ParkingWork.Entities.Parking;
@@ -13,6 +14,7 @@ namespace ParkingWork.ViewModels.Edits
     {
         private string _name;
         private string _address;
+        private string _inn;
 
         public string Name
         {
@@ -31,6 +33,16 @@ namespace ParkingWork.ViewModels.Edits
             {
                 _address = value;
                 OnPropertyChanged(nameof(Address));
+            }
+        }
+        
+        public string Inn
+        {
+            get => _inn;
+            set
+            {
+                _inn = value;
+                OnPropertyChanged(nameof(Inn));
             }
         }
 
@@ -52,6 +64,7 @@ namespace ParkingWork.ViewModels.Edits
             
             Name = _parkingChange.Name;
             Address = _parkingChange.Address;
+            Inn = _parkingChange.Inn.ToString();
             
             ChangeCommand = new RelayCommand(Change);
             RedirectBackCommand = new RelayCommand(RedirectBack);
@@ -61,10 +74,11 @@ namespace ParkingWork.ViewModels.Edits
         {
             try
             {
-                if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(Address))
+                if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(Address) || string.IsNullOrEmpty(Inn.ToString()))
                     throw new ArgumentNullException("Поля не могут быть пустыми");
 
-                Parkings.FirstOrDefault(t => t.Id == _parkingChange.Id)?.ChangeParking(Name, Address);
+                Parkings.FirstOrDefault(t => t.Id == _parkingChange.Id)
+                    ?.ChangeParking(Name, Address, BigInteger.Parse(Inn));
 
                 _parkingService.EditParking(Parkings, _parkingChange.Id);
 

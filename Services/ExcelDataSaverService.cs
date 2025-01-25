@@ -5,6 +5,7 @@ using OfficeOpenXml;
 using ParkingWork.Entities.Attendants;
 using ParkingWork.Entities.Owner;
 using ParkingWork.Entities.Parking;
+using ParkingWork.Entities.Parking.Receipt;
 
 namespace ParkingWork.Services
 {
@@ -18,8 +19,10 @@ namespace ParkingWork.Services
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
         }
 
-        public async Task SaveDataToExcelAsync(ObservableCollection<Owners> owners, ObservableCollection<Parkings> parkings,
-            ObservableCollection<ParkingLots> parkingLots, ObservableCollection<Attendants> attendants)
+        public async Task SaveDataToExcelAsync(ObservableCollection<Owners> owners,
+            ObservableCollection<Parkings> parkings,
+            ObservableCollection<ParkingLots> parkingLots, ObservableCollection<Attendants> attendants,
+            ObservableCollection<Receipts> receipts)
         {
             FileInfo newFile = new FileInfo(_filePath);
             using (var package = new ExcelPackage(newFile))
@@ -29,6 +32,7 @@ namespace ParkingWork.Services
                 await CreateOrUpdateParkingLotsSheetAsync(package, parkingLots);
                 await CreateOrUpdateAttendantsSheetAsync(package, attendants);
                 await CreateOrUpdateVehiclesSheetAsync(package, owners);
+                await CreateOrUpdateReceiptSheetAsync(package, receipts);
 
                 await package.SaveAsync();
             }
@@ -66,6 +70,7 @@ namespace ParkingWork.Services
             sheet.Cells[1, 1].Value = "Id";
             sheet.Cells[1, 2].Value = "Name";
             sheet.Cells[1, 3].Value = "Address";
+            sheet.Cells[1, 3].Value = "Inn";
 
             for (int i = 0; i < parkings.Count; i++)
             {
@@ -73,6 +78,7 @@ namespace ParkingWork.Services
                 sheet.Cells[i + 2, 1].Value = parking.Id;
                 sheet.Cells[i + 2, 2].Value = parking.Name;
                 sheet.Cells[i + 2, 3].Value = parking.Address;
+                sheet.Cells[i + 2, 4].Value = parking.Inn;
             }
 
             await Task.CompletedTask;
@@ -146,6 +152,44 @@ namespace ParkingWork.Services
 
                     rowIndex++;
                 }
+            }
+
+            await Task.CompletedTask;
+        }
+
+        private async Task CreateOrUpdateReceiptSheetAsync(ExcelPackage package,
+            ObservableCollection<Receipts> receipts)
+        {
+            var sheet = package.Workbook.Worksheets["Receipts"] ?? package.Workbook.Worksheets.Add("Receipts");
+
+            sheet.Cells[1, 1].Value = "Id";
+            sheet.Cells[1, 2].Value = "Series";
+            sheet.Cells[1, 3].Value = "Number";
+            sheet.Cells[1, 4].Value = "Owner";
+            sheet.Cells[1, 5].Value = "Parking";
+            sheet.Cells[1, 6].Value = "ParkingLot";
+            sheet.Cells[1, 7].Value = "Attendants";
+            sheet.Cells[1, 8].Value = "Days";
+            sheet.Cells[1, 9].Value = "Price";
+            sheet.Cells[1, 10].Value = "StartDate";
+            sheet.Cells[1, 11].Value = "SelectedCarId";
+
+            int rowIndex = 2;
+
+            for (int i = 0; i < receipts.Count; i++)
+            {
+                var parkingLot = receipts[i];
+                sheet.Cells[i + 2, 1].Value = parkingLot.Id;
+                sheet.Cells[i + 2, 2].Value = parkingLot.Series;
+                sheet.Cells[i + 2, 3].Value = parkingLot.Number;
+                sheet.Cells[i + 2, 4].Value = parkingLot.Owner.Id;
+                sheet.Cells[i + 2, 5].Value = parkingLot.Parking.Id;
+                sheet.Cells[i + 2, 6].Value = parkingLot.ParkingLot.Id;
+                sheet.Cells[i + 2, 7].Value = parkingLot.Attendants.Id;
+                sheet.Cells[i + 2, 8].Value = parkingLot.Days;
+                sheet.Cells[i + 2, 9].Value = parkingLot.Price;
+                sheet.Cells[i + 2, 10].Value =parkingLot.GetStartDate().ToString();
+                sheet.Cells[i + 2, 11].Value =parkingLot.SelectedCarId.ToString();
             }
 
             await Task.CompletedTask;

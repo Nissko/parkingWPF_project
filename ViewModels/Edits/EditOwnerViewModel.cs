@@ -149,8 +149,13 @@ namespace ParkingWork.ViewModels.Edits
 
         private void SaveCarChanges(object parameter)
         {
+            if (string.IsNullOrEmpty(CarId))
+            {
+                MessageBox.Show("Не выбрана машина", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            
             var carSelected = Cars.FirstOrDefault(x => x.Id == Guid.Parse(CarId));
-            ;
 
             if (carSelected != null)
             {

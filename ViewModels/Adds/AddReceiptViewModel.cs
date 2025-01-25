@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using ParkingWork.Entities.Attendants;
@@ -18,6 +19,13 @@ namespace ParkingWork.ViewModels.Adds
 {
     public class AddReceiptViewModel : INotifyPropertyChanged
     {
+        private List<Receipts> _receiptsListToAdd = new List<Receipts>();
+        /// <summary>
+        /// Серии квитанций
+        /// </summary>
+        private const string _seriesDatas = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+        
         private decimal _price;
         private int _days;
         private Parkings _selectedParking;
@@ -109,6 +117,7 @@ namespace ParkingWork.ViewModels.Adds
 
         public Attendants SelectedAttendant { get; set; }
 
+        public ICommand GenerateReceiptCommand { get; }
         public ICommand SaveCommand { get; }
         public ICommand RedirectBackCommand { get; }
 
@@ -130,6 +139,7 @@ namespace ParkingWork.ViewModels.Adds
             Attendants = attendantsList;
             Vehicles = vehiclesList;
 
+            GenerateReceiptCommand = new RelayCommand(GenerateReceipt);
             SaveCommand = new RelayCommand(Save);
             RedirectBackCommand = new RelayCommand(RedirectBack);
         }
@@ -171,23 +181,12 @@ namespace ParkingWork.ViewModels.Adds
             }
         }
 
-        private void Save(object parameter)
+        private async void GenerateReceipt(object parameter)
         {
             try
             {
-                //TODO: сделать все поля до конца
-                /*_receiptService.AddReceipt(
-                    series: "1",
-                    number: "000001",
-                    owner: SelectedOwner,
-                    parking: SelectedParking,
-                    parkingLot: SelectedParkingLot,
-                    attendant: SelectedAttendant,
-                    days: Days,
-                    price: Price
-                );
-                MessageBox.Show("Квитанция успешно создана!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);*/
-
+                _receiptsListToAdd.Clear();
+                
                 if (SelectedParking == null || SelectedParkingLot == null || SelectedOwner == null ||
                     SelectedAttendant == null || SelectedVehicle == null || string.IsNullOrEmpty(Days.ToString()) ||
                     Price <= 0)
@@ -196,12 +195,20 @@ namespace ParkingWork.ViewModels.Adds
                     return;
                 }
 
-                var preloadReceipt = new Receipts("A", "000001", SelectedOwner, SelectedParking, SelectedParkingLot,
-                    SelectedAttendant, Days, Price, SelectedVehicle.Id);
+                var seriesReceipt = await GenerateSeries(Receipts, SelectedParking);
+                var numberReceipt = await GenerateNumber(Receipts, SelectedParking, seriesReceipt);
 
-                var replacements = new Dictionary<string, string>
+                var preloadReceipt = new Receipts(seriesReceipt, numberReceipt, SelectedOwner, SelectedParking, SelectedParkingLot,
+                    SelectedAttendant, Days, Price, SelectedVehicle.Id);
+                
+                _receiptsListToAdd.Add(preloadReceipt);
+
+                #region Теги для заполнения
+
+                var tags = new Dictionary<string, string>
                 {
                     { "<PARKINGNAME>", preloadReceipt.Parking.Name },
+                    { "<INNPARKING>", $"ИНН: {preloadReceipt.Parking.Inn}" },
                     { "<ADDRESSPARKING>", preloadReceipt.Parking.Address },
                     { "<SERIES>", preloadReceipt.Series },
                     { "<NUMBER>", preloadReceipt.Number },
@@ -215,10 +222,10 @@ namespace ParkingWork.ViewModels.Adds
                     { "<ADDRESSOWNER>", preloadReceipt.Owner.Address },
                     { "<PHONEOWNER>", preloadReceipt.Owner.Phone },
                     
-                    { "<STARTDATE>", preloadReceipt.StartDate.ToShortDateString() },
-                    { "<SHOUR>", preloadReceipt.StartDate.ToString("HH") },
-                    { "<SMINE>", preloadReceipt.StartDate.ToString("mm") },
-                    { "<STARTPARK>", preloadReceipt.StartDate.ToString("dd.MM.yyyy") },
+                    { "<STARTDATE>", preloadReceipt.GetStartDate().ToShortDateString() },
+                    { "<SHOUR>", preloadReceipt.GetStartDate().ToString("HH") },
+                    { "<SMINE>", preloadReceipt.GetStartDate().ToString("mm") },
+                    { "<STARTPARK>", preloadReceipt.GetStartDate().ToString("dd.MM.yyyy") },
                     { "<ENDPARK>", preloadReceipt.EndDate.ToString("dd.MM.yyyy") },
                     
                     { "<FIOATTENDANT>", preloadReceipt.Attendants.FullNameInLine },
@@ -226,24 +233,128 @@ namespace ParkingWork.ViewModels.Adds
                     { "<DAYS>", preloadReceipt.Days.ToString() },
                     { "<AMOUNT>", preloadReceipt.Amount.ToString() },
                 };
+
+                #endregion
                 
                 var wordService = new WordService();
-                var outputWordPath = wordService.GenerateReceipt(replacements);
+                var outputWordPath = wordService.GenerateReceipt(tags);
                 var outputPath = wordService.ConvertWordToPdf(outputWordPath);
 
                 var currentWindow = Application.Current.Windows[1] as AddReceiptWindow;
                 currentWindow?.ShowPdfInWebBrowser(outputPath);
-                
-                
-                // Закрытие окна
-                //Application.Current.Windows[1]?.Close();
             }
             catch (ArgumentException ex)
             {
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                throw;
             }
         }
 
+        private void Save(object parameter)
+        {
+            try
+            {
+                var newReceiptParking = _receiptsListToAdd.FirstOrDefault();
+                if (newReceiptParking is null)
+                {
+                    MessageBox.Show("Не была найдена сформированная квитанция!", "Ошибка", MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                    return;
+                }
+
+                if (newReceiptParking.Parking == null || newReceiptParking.ParkingLot == null ||
+                    newReceiptParking.Owner == null || newReceiptParking.Attendants == null ||
+                    newReceiptParking.Owner.Vehicles == null ||
+                    string.IsNullOrEmpty(newReceiptParking.Days.ToString()) || newReceiptParking.Price <= 0)
+                {
+                    MessageBox.Show("Нет всех данных в квитанции.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                //TODO: сделать чтобы парковочное место становилось "ЗАНЯТО"
+                _receiptService.AddReceipt(newReceiptParking.Series, newReceiptParking.Number, newReceiptParking.Owner,
+                    newReceiptParking.Parking, newReceiptParking.ParkingLot, newReceiptParking.Attendants,
+                    newReceiptParking.Days, newReceiptParking.Price, newReceiptParking.SelectedCarId, newReceiptParking.GetStartDate());
+
+                MessageBox.Show("Квитанция успешно добавлена", "Успешно", MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+                
+                Application.Current.Windows[1]?.Close();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                throw;
+            }
+        }
+
+        #region Генерация серии и номера
+
+        private async Task<string> GenerateSeries(ObservableCollection<Receipts> receipts, Parkings selectedParking)
+        {
+
+            var receiptFromSelectedParking = receipts.Where(t => t.Parking.Id == selectedParking.Id);
+
+            if (!receiptFromSelectedParking.Any())
+            {
+                return "A";
+            }
+
+            var maxNumberBySeries = receiptFromSelectedParking
+                .GroupBy(r => r.Series)
+                .Select(group => new
+                {
+                    Series = group.Key,
+                    MaxNumber = group.Max(r => int.Parse(r.Number))
+                })
+                .OrderBy(g => g.Series)
+                .ToList();
+
+            var lastSeriesInfo = maxNumberBySeries.LastOrDefault();
+
+            if (lastSeriesInfo != null && lastSeriesInfo.MaxNumber >= 999999)
+            {
+                int currentSeriesIndex = _seriesDatas.IndexOf(lastSeriesInfo.Series);
+
+                if (currentSeriesIndex == _seriesDatas.Length - 1)
+                {
+                    throw new InvalidOperationException("Превышен лимит серий. Добавьте больше символов в алфавит серий.");
+                }
+
+                return _seriesDatas[currentSeriesIndex + 1].ToString();
+            }
+
+            return lastSeriesInfo?.Series ?? "A";
+        }
+
+        private async Task<string> GenerateNumber(ObservableCollection<Receipts> receipts, Parkings selectedParking,
+            string seriesReceipt)
+        {
+            return await Task.Run(() =>
+            {
+                var receiptsForSeries = receipts
+                    .Where(r => r.Parking.Id == selectedParking.Id && r.Series == seriesReceipt)
+                    .ToList();
+
+                if (!receiptsForSeries.Any())
+                {
+                    return "000001";
+                }
+
+                var maxNumber = receiptsForSeries
+                    .Select(r => int.Parse(r.Number))
+                    .Max();
+
+                if (maxNumber < 999999)
+                {
+                    return (maxNumber + 1).ToString("D6");
+                }
+                return "000001";
+            });
+        }
+
+        #endregion
+ 
         private void RedirectBack(object parameter)
         {
             Application.Current.Windows[1]?.Close();

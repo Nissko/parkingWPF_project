@@ -9,7 +9,7 @@ namespace ParkingWork.Entities.Parking.Receipt
     public class Receipts
     {
         public Receipts(string series, string number, Owners owner, Parkings parking,
-            ParkingLots parkingLot, Attendants.Attendants attendants, int days, decimal price, Guid selectedCarId)
+            ParkingLots parkingLot, Attendants.Attendants attendants, int days, decimal price, Guid selectedCarId, DateTime? startDate = null)
         {
             Id = Guid.NewGuid();
             Series = series;
@@ -20,8 +20,26 @@ namespace ParkingWork.Entities.Parking.Receipt
             Attendants = attendants;
             Days = days;
             _price = price;
-            StartDate = DateTime.Now;
-            EndDate = StartDate.AddDays(days);
+            _startDate = startDate ?? DateTime.Now;
+            EndDate = _startDate.AddDays(days);
+            _selectedCarId = selectedCarId;
+            CalculateAmount(_price);
+        }
+        
+        public Receipts(Guid id, string series, string number, Owners owner, Parkings parking,
+            ParkingLots parkingLot, Attendants.Attendants attendants, int days, decimal price, Guid selectedCarId, DateTime? startDate = null)
+        {
+            Id = id;
+            Series = series;
+            Number = number;
+            Owner = owner;
+            Parking = parking;
+            ParkingLot = parkingLot;
+            Attendants = attendants;
+            Days = days;
+            _price = price;
+            _startDate = startDate ?? DateTime.Now;
+            EndDate = _startDate.AddDays(days);
             _selectedCarId = selectedCarId;
             CalculateAmount(_price);
         }
@@ -37,11 +55,11 @@ namespace ParkingWork.Entities.Parking.Receipt
         /// Номер
         /// </summary>
         public string Number { get; set; }
-        
+
         /// <summary>
         /// Дата формирования квитанции
         /// </summary>
-        public DateTime StartDate { get; set; }
+        private DateTime _startDate;
         
         /// <summary>
         /// Дата окончания парковки
@@ -97,6 +115,11 @@ namespace ParkingWork.Entities.Parking.Receipt
         public void CalculateAmount(decimal dailyRate)
         {
             _amount = Days * dailyRate;
+        }
+
+        public DateTime GetStartDate()
+        {
+            return _startDate;
         }
     }
 }

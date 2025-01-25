@@ -114,6 +114,7 @@ namespace ParkingWork.ViewModels
             _parkingService.ParkingAdded += parking => OnParkingAdded(parking);
             _parkingLotService.ParkingLotAdded += parkingLot => OnParkingLotAdded(parkingLot);
             _ownerService.OwnerAdded += owner => OnOwnerAdded(owner);
+            _receiptService.ReceiptAdded += receipt => OnReceiptAdded(receipt);
 
             #endregion
 
@@ -127,7 +128,7 @@ namespace ParkingWork.ViewModels
 
                 var existingParking = updatedList.FirstOrDefault(p => p.Id == parking.Id);
                 if (existingParking != null)
-                    existingParking.ChangeParking(parking.Name, parking.Address);
+                    existingParking.ChangeParking(parking.Name, parking.Address, parking.Inn);
                 else
                     updatedList.Add(parking);
 
@@ -273,6 +274,7 @@ namespace ParkingWork.ViewModels
             await LoadParkingLotsFromExcel();
             await LoadParkingFromExcel();
             await LoadVehiclesFromExcel();
+            await LoadReceiptsFromExcel();
         }
 
         private async Task LoadAttendantsFromExcel()
@@ -338,6 +340,21 @@ namespace ParkingWork.ViewModels
             {
                 var vehicles = await _excelDataLoaderService.LoadVehicleFromExcel(filePath);
                 foreach (var vehicle in vehicles) Vehicles.Add(vehicle);
+            }
+            else
+            {
+                MessageBox.Show("Файл Excel не найден.", "Ошибка");
+            }
+        }
+        
+        private async Task LoadReceiptsFromExcel()
+        {
+            var filePath = _filePath;
+            if (File.Exists(filePath))
+            {
+                var receipts = await _excelDataLoaderService.LoadReceiptFromExcel(filePath, Owners, ParkingsCompany,
+                    ParkingLots, Attendants);
+                foreach (var receipt in receipts) Receipts.Add(receipt);
             }
             else
             {
@@ -497,7 +514,7 @@ namespace ParkingWork.ViewModels
         private async void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            await _excelDataSaverService.SaveDataToExcelAsync(Owners, ParkingsCompany, ParkingLots, Attendants);
+            await _excelDataSaverService.SaveDataToExcelAsync(Owners, ParkingsCompany, ParkingLots, Attendants, Receipts);
         }
 
         #region Обработчик событий ADD
@@ -525,10 +542,16 @@ namespace ParkingWork.ViewModels
             Owners.Add(owner);
             await SaveDataToExcelAsync();
         }
+        
+        private async void OnReceiptAdded(Receipts receipts)
+        {
+            Receipts.Add(receipts);
+            await SaveDataToExcelAsync();
+        }
 
         private async Task SaveDataToExcelAsync()
         {
-            await _excelDataSaverService.SaveDataToExcelAsync(Owners, ParkingsCompany, ParkingLots, Attendants);
+            await _excelDataSaverService.SaveDataToExcelAsync(Owners, ParkingsCompany, ParkingLots, Attendants, Receipts);
         }
 
         #endregion

@@ -9,6 +9,9 @@
             
             <TextBlock Text="Адрес:" />
             <TextBox Text="{Binding Address, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
+            
+            <TextBlock Text="ИНН:" />
+            <TextBox Text="{Binding Inn, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
 
             <Button Content="Сохранить" Command="{Binding SaveCommand}" Width="100" HorizontalAlignment="Right" />
             <Button Content="Назад" Command="{Binding RedirectBackCommand}" Width="100" HorizontalAlignment="Right" Margin="0, 10, 0, 0" />

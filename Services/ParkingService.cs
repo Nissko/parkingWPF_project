@@ -11,14 +11,14 @@ namespace ParkingWork.Services
         
         public event Action<Parkings> ParkingChanged;
 
-        public void AddParking(string parkingName, string parkingAddress)
+        public void AddParking(string parkingName, string parkingAddress, int inn)
         {
-            if (string.IsNullOrEmpty(parkingName) || string.IsNullOrEmpty(parkingAddress))
+            if (string.IsNullOrEmpty(parkingName) || string.IsNullOrEmpty(parkingAddress) || string.IsNullOrEmpty(inn.ToString()))
             {
                 throw new ArgumentException("Все поля должны быть заполнены.");
             }
 
-            var newParking = new Parkings(Guid.NewGuid(), parkingName, parkingAddress);
+            var newParking = new Parkings(Guid.NewGuid(), parkingName, parkingAddress, inn);
             
             ParkingAdded?.Invoke(newParking);
         }

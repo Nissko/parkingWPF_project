@@ -10,6 +10,7 @@ namespace ParkingWork.ViewModels.Adds
     {
         private string _name;
         private string _address;
+        private int _inn;
 
         public string Name
         {
@@ -30,6 +31,16 @@ namespace ParkingWork.ViewModels.Adds
                 OnPropertyChanged(nameof(Address));
             }
         }
+        
+        public int Inn
+        {
+            get => _inn;
+            set
+            {
+                _inn = value;
+                OnPropertyChanged(nameof(Inn));
+            }
+        }
 
         public ICommand SaveCommand { get; }
         public ICommand RedirectBackCommand { get; }
@@ -47,7 +58,7 @@ namespace ParkingWork.ViewModels.Adds
         {
             try
             {
-                _parkingService.AddParking(Name, Address);
+                _parkingService.AddParking(Name, Address, Inn);
                 MessageBox.Show("Стоянка успешно добавлена!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 // Закрытие окна
