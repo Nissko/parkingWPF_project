@@ -123,3 +123,11 @@ C:\GitHubRepositories\parkingWPF_project\bin\Debug\Microsoft.Web.WebView2.Core.x
 C:\GitHubRepositories\parkingWPF_project\bin\Debug\Microsoft.Web.WebView2.WinForms.xml
 C:\GitHubRepositories\parkingWPF_project\bin\Debug\Microsoft.Web.WebView2.Wpf.xml
 C:\GitHubRepositories\parkingWPF_project\obj\Debug\ParkingWork_Content.g.cs
+C:\GitHubRepositories\parkingWPF_project\bin\Debug\LiveCharts.dll
+C:\GitHubRepositories\parkingWPF_project\bin\Debug\LiveCharts.Wpf.dll
+C:\GitHubRepositories\parkingWPF_project\bin\Debug\LiveCharts.pdb
+C:\GitHubRepositories\parkingWPF_project\bin\Debug\LiveCharts.xml
+C:\GitHubRepositories\parkingWPF_project\bin\Debug\LiveCharts.Wpf.pdb
+C:\GitHubRepositories\parkingWPF_project\bin\Debug\LiveCharts.Wpf.xml
+C:\GitHubRepositories\parkingWPF_project\obj\Debug\Windows\Stats\StatisticsWindow.baml
+C:\GitHubRepositories\parkingWPF_project\obj\Debug\Windows\Stats\StatisticsWindow.g.cs

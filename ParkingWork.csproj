@@ -50,6 +50,12 @@
     <Reference Include="EPPlus.System.Drawing, Version=7.5.0.0, Culture=neutral, PublicKeyToken=2308d35469c9bac0, processorArchitecture=MSIL">
       <HintPath>packages\EPPlus.System.Drawing.7.5.0\lib\net462\EPPlus.System.Drawing.dll</HintPath>
     </Reference>
+    <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
+    </Reference>
+    <Reference Include="LiveCharts.Wpf, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>packages\LiveCharts.Wpf.0.9.7\lib\net45\LiveCharts.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.IO.RecyclableMemoryStream, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.IO.RecyclableMemoryStream.3.0.1\lib\netstandard2.0\Microsoft.IO.RecyclableMemoryStream.dll</HintPath>
     </Reference>
@@ -120,6 +126,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Entities\Parking\Receipt\ReceiptStatistics.cs" />
     <Compile Include="Entities\Person.cs" />
     <Compile Include="Services\AttendantService.cs" />
     <Compile Include="Services\ExcelDataLoaderService.cs" />
@@ -128,6 +135,7 @@
     <Compile Include="Services\ParkingLotService.cs" />
     <Compile Include="Services\ParkingService.cs" />
     <Compile Include="Services\ReceiptService.cs" />
+    <Compile Include="Services\ReceiptStatisticsService.cs" />
     <Compile Include="Services\WordService.cs" />
     <Compile Include="ViewModels\Adds\AddAttendantViewModel.cs" />
     <Compile Include="ViewModels\Adds\AddOwnerViewModel.cs" />
@@ -141,6 +149,7 @@
     <Compile Include="ViewModels\ParkingViewModel.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />
     <Compile Include="ViewModels\SaveToExcelCommand.cs" />
+    <Compile Include="ViewModels\Stats\StatisticsViewModel.cs" />
     <Compile Include="Windows\Adds\AddAttendantWindow.xaml.cs">
       <DependentUpon>AddAttendantWindow.xaml</DependentUpon>
     </Compile>
@@ -167,6 +176,9 @@
     </Compile>
     <Compile Include="Windows\Edits\EditParkingWindow.xaml.cs">
       <DependentUpon>EditParkingWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Stats\StatisticsWindow.xaml.cs">
+      <DependentUpon>StatisticsWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -197,6 +209,7 @@
     <Page Include="Windows\Edits\EditOwnerWindow.xaml" />
     <Page Include="Windows\Edits\EditParkingLotWindow.xaml" />
     <Page Include="Windows\Edits\EditParkingWindow.xaml" />
+    <Page Include="Windows\Stats\StatisticsWindow.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

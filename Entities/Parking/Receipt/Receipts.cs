@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DocumentFormat.OpenXml.Wordprocessing;
 using ParkingWork.Entities.Owner;
 
 namespace ParkingWork.Entities.Parking.Receipt

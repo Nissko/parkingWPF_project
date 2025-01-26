@@ -21,7 +21,7 @@
                 <MenuItem Header="Добавить парковочное место" Command="{Binding AddParkingLotCommand}" />
             </MenuItem>
             <MenuItem Header="Отчеты">
-                <MenuItem Header="Вывести статистику" />
+                <MenuItem Header="Вывести статистику" Command="{Binding GetReceiptStatsCommand}" />
                 <MenuItem Header="Вывести парковки по доходам" />
             </MenuItem>
         </Menu>

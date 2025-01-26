@@ -16,8 +16,10 @@ using ParkingWork.Entities.Vehicle;
 using ParkingWork.Services;
 using ParkingWork.ViewModels.Adds;
 using ParkingWork.ViewModels.Edits;
+using ParkingWork.ViewModels.Stats;
 using ParkingWork.Windows.Adds;
 using ParkingWork.Windows.Edits;
+using ParkingWork.Windows.Stats;
 
 namespace ParkingWork.ViewModels
 {
@@ -60,11 +62,12 @@ namespace ParkingWork.ViewModels
 
         #endregion
 
-        #region Команды на сохранение
+        #region Команды на сохранение/статистику
 
         public ICommand SaveToExcelCommand { get; }
         public ICommand SaveToTextFileCommand { get; }
         public ICommand PrintReceiptCommand { get; }
+        public ICommand GetReceiptStatsCommand { get; }
 
         #endregion
         
@@ -258,7 +261,11 @@ namespace ParkingWork.ViewModels
 
             SaveToExcelCommand = new RelayCommand(SaveToExcel);
             SaveToTextFileCommand = new RelayCommand(SaveToTextFile);
+            /*Вывод квитанции для печати*/
             PrintReceiptCommand = new RelayCommand(PrintReceipt);
+            /*Вывод статистики квитанций по месяцам*/
+            GetReceiptStatsCommand = new RelayCommand(GetReceiptStatistics);
+            /*Закрытие приложение*/
             CloseApplicationCommand = new RelayCommand(CloseApplication);
 
             #endregion
@@ -553,6 +560,19 @@ namespace ParkingWork.ViewModels
                     MessageBox.Show($"Ошибка при сохранении файла: {ex.Message}", "Ошибка", MessageBoxButton.OK,
                         MessageBoxImage.Error);
                 }
+        }
+
+        /// <summary>
+        /// Вывод статистики по суммам квитанций по месяцам в виде гистограммы.
+        /// </summary>
+        private void GetReceiptStatistics(object parameter)
+        {
+            var receiptsToStat = Receipts;
+            var statistics = ReceiptStatisticsService.GetMonthlyStatistics(receiptsToStat);
+            var viewModel = new StatisticsViewModel(statistics);
+
+            var statisticsWindow = new StatisticsWindow(viewModel);
+            statisticsWindow.ShowDialog();
         }
 
         /// <summary>
