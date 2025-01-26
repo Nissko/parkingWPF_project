@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using Microsoft.Win32;
 using ParkingWork.Entities.Attendants;
 using ParkingWork.Entities.Owner;
 using ParkingWork.Entities.Parking;
@@ -62,7 +64,7 @@ namespace ParkingWork.ViewModels
 
         public ICommand SaveToExcelCommand { get; }
         public ICommand SaveToTextFileCommand { get; }
-        public ICommand PrintCommand { get; }
+        public ICommand PrintReceiptCommand { get; }
 
         #endregion
         
@@ -256,7 +258,7 @@ namespace ParkingWork.ViewModels
 
             SaveToExcelCommand = new RelayCommand(SaveToExcel);
             SaveToTextFileCommand = new RelayCommand(SaveToTextFile);
-            PrintCommand = new RelayCommand(Print);
+            PrintReceiptCommand = new RelayCommand(PrintReceipt);
             CloseApplicationCommand = new RelayCommand(CloseApplication);
 
             #endregion
@@ -489,13 +491,68 @@ namespace ParkingWork.ViewModels
         }
 
         /// <summary>
-        /// Напечатать данные
+        /// Печать квитанции
         /// </summary>
-        private void Print(object parameter)
+        private void PrintReceipt(object parameter)
         {
-            // Реализуйте логику печати данных
-            // Например, вызов метода для печати данных
-            Console.WriteLine("Print executed");
+            if (!(parameter is Receipts receipt)) return;
+
+            var tags = new Dictionary<string, string>
+            {
+                { "<PARKINGNAME>", receipt.Parking.Name },
+                { "<INNPARKING>", $"ИНН: {receipt.Parking.Inn}" },
+                { "<ADDRESSPARKING>", receipt.Parking.Address },
+                { "<SERIES>", receipt.Series },
+                { "<NUMBER>", receipt.Number },
+                { "<PARKINGLOT>", receipt.ParkingLot.Name },
+
+                { "<CARBRAND>", receipt.Owner.Vehicles.FirstOrDefault(t => t.Id == receipt.SelectedCarId)?.Brand },
+                { "<CARMODEL>", receipt.Owner.Vehicles.FirstOrDefault(t => t.Id == receipt.SelectedCarId)?.Model },
+                {
+                    "<LICENSEPLATE>",
+                    receipt.Owner.Vehicles.FirstOrDefault(t => t.Id == receipt.SelectedCarId)?.LicensePlate
+                },
+
+                { "<FIOOWNER>", receipt.Owner.FullNameInLine },
+                { "<ADDRESSOWNER>", receipt.Owner.Address },
+                { "<PHONEOWNER>", receipt.Owner.Phone },
+
+                { "<STARTDATE>", receipt.GetStartDate().ToShortDateString() },
+                { "<SHOUR>", receipt.GetStartDate().ToString("HH") },
+                { "<SMINE>", receipt.GetStartDate().ToString("mm") },
+                { "<STARTPARK>", receipt.GetStartDate().ToString("dd.MM.yyyy") },
+                { "<ENDPARK>", receipt.EndDate.ToString("dd.MM.yyyy") },
+
+                { "<FIOATTENDANT>", receipt.Attendants.FullNameInLine },
+
+                { "<DAYS>", receipt.Days.ToString() },
+                { "<AMOUNT>", receipt.Amount.ToString() }
+            };
+
+            var wordService = new WordService();
+            var outputWordPath = wordService.GenerateReceipt(tags);
+            var pdfFilePath = wordService.ConvertWordToPdf(outputWordPath);
+
+            var saveFileDialog = new SaveFileDialog
+            {
+                Title = "Сохранить квитанцию",
+                Filter = "PDF файлы (*.pdf)|*.pdf",
+                FileName =
+                    $"Квитанция_{receipt.Series}_{receipt.Number}_{receipt.Parking.Name.Replace(" ", "_").Replace("\"", "_")}_{receipt.GetStartDate().ToString("dd.MM.yyyy")}.pdf"
+            };
+
+            if (saveFileDialog.ShowDialog() == true)
+                try
+                {
+                    File.Copy(pdfFilePath, saveFileDialog.FileName, true);
+                    MessageBox.Show("Квитанция успешно сохранена!", "Успех", MessageBoxButton.OK,
+                        MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка при сохранении файла: {ex.Message}", "Ошибка", MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                }
         }
 
         /// <summary>

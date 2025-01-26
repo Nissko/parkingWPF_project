@@ -271,7 +271,6 @@ namespace ParkingWork.ViewModels.Adds
                     return;
                 }
 
-                //TODO: сделать чтобы парковочное место становилось "ЗАНЯТО"
                 _receiptService.AddReceipt(newReceiptParking.Series, newReceiptParking.Number, newReceiptParking.Owner,
                     newReceiptParking.Parking, newReceiptParking.ParkingLot, newReceiptParking.Attendants,
                     newReceiptParking.Days, newReceiptParking.Price, newReceiptParking.SelectedCarId, newReceiptParking.GetStartDate());
