@@ -546,6 +546,8 @@ namespace ParkingWork.ViewModels
         private async void OnReceiptAdded(Receipts receipts)
         {
             Receipts.Add(receipts);
+            ParkingLots.FirstOrDefault(pl => pl.Id == receipts.ParkingLot.Id).IsFree = false;
+            OnPropertyChanged(nameof(ParkingLots));
             await SaveDataToExcelAsync();
         }
 

@@ -115,9 +115,18 @@
                         <Button Grid.Column="1" Padding="5" HorizontalAlignment="Stretch" VerticalAlignment="Center" 
                                 Content="Создать квитанцию" Command="{Binding AddReceiptCommand}" Margin="5" />
                     </Grid>
-                    
-                    
-                    
+
+                    <ListBox ItemsSource="{Binding Receipts}" Margin="10">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="5">
+                                    <!-- Информация о квитанциях -->
+                                    <TextBlock Text="{Binding FullInfoReceiptString}" TextWrapping="Wrap"  Padding="0, 10, 0, 10" />
+                                    
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
                 </StackPanel>
             </TabItem>
         </TabControl>

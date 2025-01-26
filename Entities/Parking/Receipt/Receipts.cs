@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using DocumentFormat.OpenXml.Wordprocessing;
 using ParkingWork.Entities.Owner;
 
 namespace ParkingWork.Entities.Parking.Receipt
@@ -108,6 +111,23 @@ namespace ParkingWork.Entities.Parking.Receipt
         /// </summary>
         private Guid _selectedCarId;
         public Guid SelectedCarId => _selectedCarId;
+        
+        public string FullInfoReceiptString
+        {
+            get
+            {
+                var fullInfo = new List<string>
+                {
+                    $"Серия {Series} № {Number}",
+                    $"Парковка {Parking.Name}, {ParkingLot.Name}",
+                    $"Клиент {Owner.FullNameInLine}, автомобиль {Owner.Vehicles.FirstOrDefault(t=> t.Id == SelectedCarId).Brand} {Owner.Vehicles.FirstOrDefault(t=> t.Id == SelectedCarId).Model}",
+                    $"Дата {_startDate.ToString("dd.MM.yyyy")} - {EndDate.ToString("dd.MM.yyyy")}",
+                    $"Сумма {Amount} рублей"
+                };
+
+                return string.Join(Environment.NewLine, fullInfo);
+            }
+        }
 
         /// <summary>
         /// Расчет стоимости
