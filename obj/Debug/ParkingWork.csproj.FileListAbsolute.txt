@@ -131,3 +131,5 @@ C:\GitHubRepositories\parkingWPF_project\bin\Debug\LiveCharts.Wpf.pdb
 C:\GitHubRepositories\parkingWPF_project\bin\Debug\LiveCharts.Wpf.xml
 C:\GitHubRepositories\parkingWPF_project\obj\Debug\Windows\Stats\StatisticsWindow.baml
 C:\GitHubRepositories\parkingWPF_project\obj\Debug\Windows\Stats\StatisticsWindow.g.cs
+C:\GitHubRepositories\parkingWPF_project\obj\Debug\Windows\Stats\ParkingIncomeStatisticsWindow.g.cs
+C:\GitHubRepositories\parkingWPF_project\obj\Debug\Windows\Stats\ParkingIncomeStatisticsWindow.baml

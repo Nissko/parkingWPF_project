@@ -149,6 +149,7 @@
     <Compile Include="ViewModels\ParkingViewModel.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />
     <Compile Include="ViewModels\SaveToExcelCommand.cs" />
+    <Compile Include="ViewModels\Stats\ParkingIncomeStatisticsViewModel.cs" />
     <Compile Include="ViewModels\Stats\StatisticsViewModel.cs" />
     <Compile Include="Windows\Adds\AddAttendantWindow.xaml.cs">
       <DependentUpon>AddAttendantWindow.xaml</DependentUpon>
@@ -176,6 +177,9 @@
     </Compile>
     <Compile Include="Windows\Edits\EditParkingWindow.xaml.cs">
       <DependentUpon>EditParkingWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Stats\ParkingIncomeStatisticsWindow.xaml.cs">
+      <DependentUpon>ParkingIncomeStatisticsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\Stats\StatisticsWindow.xaml.cs">
       <DependentUpon>StatisticsWindow.xaml</DependentUpon>
@@ -209,6 +213,7 @@
     <Page Include="Windows\Edits\EditOwnerWindow.xaml" />
     <Page Include="Windows\Edits\EditParkingLotWindow.xaml" />
     <Page Include="Windows\Edits\EditParkingWindow.xaml" />
+    <Page Include="Windows\Stats\ParkingIncomeStatisticsWindow.xaml" />
     <Page Include="Windows\Stats\StatisticsWindow.xaml" />
   </ItemGroup>
   <ItemGroup>

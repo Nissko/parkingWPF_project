@@ -68,6 +68,7 @@ namespace ParkingWork.ViewModels
         public ICommand SaveToTextFileCommand { get; }
         public ICommand PrintReceiptCommand { get; }
         public ICommand GetReceiptStatsCommand { get; }
+        public ICommand GetParkingFromIncomeCommand { get; }
 
         #endregion
         
@@ -257,7 +258,7 @@ namespace ParkingWork.ViewModels
 
             #endregion
             
-            #region Инициализация команд сохранения
+            #region Инициализация команд сохранения/Статистики
 
             SaveToExcelCommand = new RelayCommand(SaveToExcel);
             SaveToTextFileCommand = new RelayCommand(SaveToTextFile);
@@ -265,6 +266,8 @@ namespace ParkingWork.ViewModels
             PrintReceiptCommand = new RelayCommand(PrintReceipt);
             /*Вывод статистики квитанций по месяцам*/
             GetReceiptStatsCommand = new RelayCommand(GetReceiptStatistics);
+            /*Вывести парковки в порядке убывания доходов*/
+            GetParkingFromIncomeCommand = new RelayCommand(GetParkingFromIncomeDesk);
             /*Закрытие приложение*/
             CloseApplicationCommand = new RelayCommand(CloseApplication);
 
@@ -571,8 +574,36 @@ namespace ParkingWork.ViewModels
             var statistics = ReceiptStatisticsService.GetMonthlyStatistics(receiptsToStat);
             var viewModel = new StatisticsViewModel(statistics);
 
-            var statisticsWindow = new StatisticsWindow(viewModel);
-            statisticsWindow.ShowDialog();
+            var window = new StatisticsWindow(viewModel);
+            window.ShowDialog();
+        }
+
+        /// <summary>
+        /// Вывести парковки в порядке убывания доходов
+        /// </summary>
+        private void GetParkingFromIncomeDesk(object parameter)
+        {
+            var parkings = ParkingsCompany;
+            var receipts = Receipts;
+
+            // Группировка квитанций по парковкам и рассчет дохода
+            var parkingIncomes = parkings
+                .Select(parking => new
+                {
+                    Parking = parking,
+                    TotalIncome = receipts
+                        .Where(receipt => receipt.Parking.Id == parking.Id)
+                        .Sum(receipt => receipt.Amount)
+                })
+                .OrderByDescending(x => x.TotalIncome)
+                .ToList();
+
+            var resultIncomes = string.Join(Environment.NewLine, parkingIncomes.Select(p =>
+                $"Парковка: {p.Parking.Name}, Доход: {p.TotalIncome:C}"));
+
+            var viewModel = new ParkingIncomeStatisticsViewModel(resultIncomes);
+            var window = new ParkingIncomeStatisticsWindow(viewModel);
+            window.ShowDialog();
         }
 
         /// <summary>

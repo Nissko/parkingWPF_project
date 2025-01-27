@@ -22,7 +22,7 @@
             </MenuItem>
             <MenuItem Header="Отчеты">
                 <MenuItem Header="Вывести статистику" Command="{Binding GetReceiptStatsCommand}" />
-                <MenuItem Header="Вывести парковки по доходам" />
+                <MenuItem Header="Вывести парковки по доходам" Command="{Binding GetParkingFromIncomeCommand}" />
             </MenuItem>
         </Menu>
         <TabControl Margin="0, 20, 0, 0">
