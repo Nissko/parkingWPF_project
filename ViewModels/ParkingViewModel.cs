@@ -479,14 +479,14 @@ namespace ParkingWork.ViewModels
 
         #endregion
 
+        #region Функции для команд сохранения/статистики
+
         /// <summary>
         /// Сохранить данные в Excel
         /// </summary>
-        private void SaveToExcel(object parameter)
+        private async void SaveToExcel(object parameter)
         {
-            // Реализуйте логику сохранения в Excel
-            // Например, вызов метода для экспорта данных в файл Excel
-            Console.WriteLine("Data saved to Excel");
+            await SaveDataToExcelFreeFormatAsync();
         }
 
 
@@ -606,6 +606,8 @@ namespace ParkingWork.ViewModels
             window.ShowDialog();
         }
 
+        #endregion
+
         /// <summary>
         /// Закрытие приложения
         /// </summary>
@@ -659,9 +661,20 @@ namespace ParkingWork.ViewModels
             await SaveDataToExcelAsync();
         }
 
+        /// <summary>
+        /// Автоматическое сохранение
+        /// </summary>
         private async Task SaveDataToExcelAsync()
         {
             await _excelDataSaverService.SaveDataToExcelAsync(Owners, ParkingsCompany, ParkingLots, Attendants, Receipts);
+        }
+        
+        /// <summary>
+        /// Сохранение Excel в свободной форме для формирования базы данных
+        /// </summary>
+        private async Task SaveDataToExcelFreeFormatAsync()
+        {
+            await _excelDataSaverService.SaveDataToExcelFreeFormatAsync(Owners, ParkingsCompany, ParkingLots, Attendants, Receipts);
         }
 
         #endregion

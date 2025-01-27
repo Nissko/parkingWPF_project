@@ -1,5 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using OfficeOpenXml;
 using ParkingWork.Entities.Attendants;
@@ -37,6 +39,35 @@ namespace ParkingWork.Services
                 await package.SaveAsync();
             }
         }
+
+        public async Task SaveDataToExcelFreeFormatAsync(ObservableCollection<Owners> owners,
+            ObservableCollection<Parkings> parkings,
+            ObservableCollection<ParkingLots> parkingLots, ObservableCollection<Attendants> attendants,
+            ObservableCollection<Receipts> receipts)
+        {
+            var directory = Path.GetDirectoryName(_filePath);
+            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(_filePath);
+            var fileExtension = Path.GetExtension(_filePath);
+            var newFilePath = Path.Combine(directory, $"{fileNameWithoutExtension}_FreeFormat{fileExtension}");
+
+            FileInfo newFile = new FileInfo(newFilePath);
+
+            using (var package = new ExcelPackage(newFile))
+            {
+                await CreateOrUpdateOwnersSheetAsync(package, owners);
+                await CreateOrUpdateParkingsSheetAsync(package, parkings);
+                await CreateOrUpdateParkingLotsSheetAsync(package, parkingLots);
+                await CreateOrUpdateAttendantsSheetAsync(package, attendants);
+                await CreateOrUpdateVehiclesSheetAsync(package, owners);
+                await CreateOrUpdateReceiptSheetAsync(package, receipts);
+                /*статистика*/
+                await LastMonthsTotal(package, receipts, parkings);
+
+                await package.SaveAsync();
+            }
+        }
+
+        #region Таблицы
 
         private async Task CreateOrUpdateOwnersSheetAsync(ExcelPackage package, ObservableCollection<Owners> owners)
         {
@@ -194,5 +225,86 @@ namespace ParkingWork.Services
 
             await Task.CompletedTask;
         }
+
+        #endregion
+
+        #region Статистика
+
+        /// <summary>
+        /// Итог за прошедший месяц
+        /// </summary>
+        private async Task LastMonthsTotal(ExcelPackage package, ObservableCollection<Receipts> receipts,
+            ObservableCollection<Parkings> parkings)
+        {
+            var lastMonth = DateTime.Now.AddMonths(-1);
+            var lastMonthString = lastMonth.ToString("MM.yyyy");
+
+            foreach (var parking in parkings)
+            {
+                var sheetName = parking.Name;
+                var sheet = package.Workbook.Worksheets.FirstOrDefault(ws => ws.Name == sheetName)
+                            ?? package.Workbook.Worksheets.Add(sheetName);
+
+                if (sheet.Dimension == null)
+                {
+                    sheet.Cells[1, 1].Value = "Id";
+                    sheet.Cells[1, 2].Value = "Series";
+                    sheet.Cells[1, 3].Value = "Number";
+                    sheet.Cells[1, 4].Value = "Owner";
+                    sheet.Cells[1, 5].Value = "Parking Lot";
+                    sheet.Cells[1, 6].Value = "Days";
+                    sheet.Cells[1, 7].Value = "Amount";
+                    sheet.Cells[1, 8].Value = "Start Date";
+                }
+
+                var startRow = sheet.Dimension?.Rows + 1 ?? 2;
+
+                bool totalExists = false;
+                for (int row = 2; row <= sheet.Dimension.Rows; row++)
+                {
+                    if (sheet.Cells[row, 6].Text.Contains($"Итог за месяц {lastMonthString}"))
+                    {
+                        totalExists = true;
+                        break;
+                    }
+                }
+
+                if (totalExists) continue;
+
+                var lastMonthReceipts = receipts
+                    .Where(r => r.Parking.Id == parking.Id &&
+                                r.GetStartDate().Year == lastMonth.Year &&
+                                r.GetStartDate().Month == lastMonth.Month);
+
+                foreach (var (receipt, index) in lastMonthReceipts.Select((r, i) => (r, i)))
+                {
+                    sheet.Cells[startRow + index, 1].Value = receipt.Id;
+                    sheet.Cells[startRow + index, 2].Value = receipt.Series;
+                    sheet.Cells[startRow + index, 3].Value = receipt.Number;
+                    sheet.Cells[startRow + index, 4].Value = receipt.Owner.FullNameInLine;
+                    sheet.Cells[startRow + index, 5].Value = receipt.ParkingLot.Name;
+                    sheet.Cells[startRow + index, 6].Value = receipt.Days;
+                    sheet.Cells[startRow + index, 7].Value = receipt.Amount;
+                    sheet.Cells[startRow + index, 8].Value = receipt.GetStartDate().ToShortDateString();
+                }
+
+                var totalAmount = lastMonthReceipts.Sum(r => r.Amount);
+
+                var totalRow = startRow + lastMonthReceipts.Count();
+                sheet.Cells[totalRow, 6].Value = $"Итог за месяц {lastMonthString}:";
+                sheet.Cells[totalRow, 7].Value = totalAmount;
+
+                using (var range = sheet.Cells[totalRow, 6, totalRow, 7])
+                {
+                    range.Style.Font.Bold = true;
+                    range.Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                    range.Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                }
+            }
+
+            await Task.CompletedTask;
+        }
+
+        #endregion
     }
 }
