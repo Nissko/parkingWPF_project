@@ -11,7 +11,7 @@
         <Menu>
             <MenuItem Header="Файл">
                 <MenuItem Header="Сохранить в ExcelFreeFormat" Command="{Binding SaveToExcelCommand}" />
-                <MenuItem Header="Сохранить в текстовый файл" Command="{Binding SaveToTextFileCommand}" />
+                <MenuItem Header="Сохранить квитанции в Word" Command="{Binding SaveToTextFileCommand}" />
                 <MenuItem Header="Выход" Command="{Binding CloseApplicationCommand}" />
             </MenuItem>
             <MenuItem Header="Действия">

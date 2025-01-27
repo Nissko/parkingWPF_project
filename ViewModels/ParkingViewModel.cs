@@ -261,7 +261,7 @@ namespace ParkingWork.ViewModels
             #region Инициализация команд сохранения/Статистики
 
             SaveToExcelCommand = new RelayCommand(SaveToExcel);
-            SaveToTextFileCommand = new RelayCommand(SaveToTextFile);
+            SaveToTextFileCommand = new RelayCommand(SaveAllReceiptsToSingleWordFile);
             /*Вывод квитанции для печати*/
             PrintReceiptCommand = new RelayCommand(PrintReceipt);
             /*Вывод статистики квитанций по месяцам*/
@@ -489,15 +489,13 @@ namespace ParkingWork.ViewModels
             await SaveDataToExcelFreeFormatAsync();
         }
 
-
         /// <summary>
         /// Сохранить данные в текстовый файл
         /// </summary>
-        private void SaveToTextFile(object parameter)
+        private void SaveAllReceiptsToSingleWordFile(object parameter)
         {
-            // Реализуйте логику сохранения в текстовый файл
-            // Например, сохранение данных в текстовый файл
-            Console.WriteLine("Data saved to Text File");
+            WordService wordService = new WordService();
+            wordService.SaveAllReceiptsToSingleWordFile(Receipts);
         }
 
         /// <summary>
