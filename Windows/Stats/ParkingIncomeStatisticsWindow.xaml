@@ -6,31 +6,60 @@
         xmlns:local="clr-namespace:ParkingWork.Windows.Stats"
         mc:Ignorable="d"
         Title="Список парковок в порядке убывания доходов" Height="450" Width="800">
-    <StackPanel>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-        
-            <TextBlock Grid.Row="0" Margin="15 15 5 5 " Text="Статистика за все время: " FontSize="14px" />
-        </Grid>
-        
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            
-            <TextBlock Grid.Row="0" Margin="15 5 15 5" Text="{Binding ResultIncomes}" FontSize="12px" />
-        </Grid>
-        
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            
-            <Button Margin=" 15 5 15 5" Command="{Binding RedirectBackCommand}">Выйти</Button>
-        </Grid>
+    
+    <Window.Resources>
+        <Style x:Key="ModernButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#FF1E90FF"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Width" Value="200px" />
+            <Setter Property="Height" Value="30px"/>
+            <Setter Property="Padding" Value="15 10"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="5" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                BorderBrush="{TemplateBinding BorderBrush}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect ShadowDepth="2" Opacity="0.5"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FF007ACC"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="ModernTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="Padding" Value="0, 5, 0, 5"/>
+        </Style>
+    </Window.Resources>
+
+    <StackPanel Margin="10">
+
+        <TextBlock Margin="15 15 5 15" Text="Статистика за все время:" FontSize="16" FontWeight="Bold" Style="{StaticResource ModernTextBlockStyle}" />
+
+        <TextBlock Margin="15 5 15 15" Text="{Binding ResultIncomes}" FontSize="14" Style="{StaticResource ModernTextBlockStyle}" />
+
+        <Button Content="Назад" Command="{Binding RedirectBackCommand}" Margin="15 5 15 5" Style="{StaticResource ModernButtonStyle}" />
     </StackPanel>
 </Window>

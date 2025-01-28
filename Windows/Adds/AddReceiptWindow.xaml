@@ -3,6 +3,45 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
         Title="Создать квитанцию парковки" WindowState="Maximized" Height="500" Width="800">
+    
+    <Window.Resources>
+        <Style x:Key="ModernButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#FF1E90FF"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Height" Value="25px" />
+            <Setter Property="Padding" Value="20 15"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="5" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                BorderBrush="{TemplateBinding BorderBrush}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect ShadowDepth="2" Opacity="0.5"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FF007ACC"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
     <Grid Margin="10">
         <StackPanel>
 
@@ -13,13 +52,9 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-
-                <!-- Выберите автостоянку -->
                 <TextBlock Text="Выберите автостоянку:" VerticalAlignment="Center" Grid.Column="0" Margin="5" />
                 <ComboBox Width="250" Margin="5" HorizontalAlignment="Left" DisplayMemberPath="Name" 
                           ItemsSource="{Binding Parkings}" SelectedItem="{Binding SelectedParking}" Grid.Column="1" />
-
-                <!-- Выберите парковочное место -->
                 <TextBlock Text="Выберите парковочное место:" VerticalAlignment="Center" Grid.Column="2" Margin="5" />
                 <ComboBox Width="250" Margin="5" HorizontalAlignment="Left" DisplayMemberPath="Name" 
                           ItemsSource="{Binding AvailableParkingLots}" SelectedItem="{Binding SelectedParkingLot}" Grid.Column="3" />
@@ -32,42 +67,32 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-
-                <!-- Выберите владельца -->
                 <TextBlock Text="Выберите владельца:" VerticalAlignment="Center" Grid.Column="0" Margin="5" />
                 <ComboBox Width="250" Margin="5" HorizontalAlignment="Left" DisplayMemberPath="FullNameInLine" 
                           ItemsSource="{Binding Owners}" SelectedItem="{Binding SelectedOwner}" Grid.Column="1" />
-
-                <!-- Выберите кладовщика -->
                 <TextBlock Text="Выберите кладовщика:" VerticalAlignment="Center" Grid.Column="2" Margin="5" />
                 <ComboBox Width="250" Margin="5" HorizontalAlignment="Left" DisplayMemberPath="FullNameInLine" 
                           ItemsSource="{Binding Attendants}" SelectedItem="{Binding SelectedAttendant}" Grid.Column="3" />
             </Grid>
-            
-            <Grid Margin="5, 0,5,5">
+
+            <Grid Margin="5, 0, 5, 5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-
-                <!-- Введите цену -->
                 <TextBlock Text="Введите цену:" VerticalAlignment="Center" Grid.Column="0" Margin="5" />
                 <TextBox PreviewTextInput="TextBox_Price_Validate" Text="{Binding Price, UpdateSourceTrigger=PropertyChanged}" Width="250" Margin="5" HorizontalAlignment="Left" Grid.Column="1" />
-                
-                <!-- Введите количество дней -->
                 <TextBlock Text="Введите количество дней:" VerticalAlignment="Center" Grid.Column="2" Margin="5" />
                 <TextBox Text="{Binding Days, UpdateSourceTrigger=PropertyChanged}" Width="250" Margin="5" HorizontalAlignment="Left" Grid.Column="3" />
             </Grid>
-            
+
             <Grid Margin="5, 0, 5, 5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-
-                <!-- Выберите автомобиль -->
                 <TextBlock Text="Выберите автомобиль:" VerticalAlignment="Center" Grid.Column="0" Margin="5" />
                 <ComboBox Width="1200" Margin="5" HorizontalAlignment="Left" DisplayMemberPath="StringCarInfoInLine" 
                           ItemsSource="{Binding AvailableOwnerCars}" SelectedItem="{Binding SelectedVehicle}" Grid.Column="1" />
@@ -77,27 +102,25 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-
                 <Button Grid.Column="0" Padding="5" HorizontalAlignment="Stretch" VerticalAlignment="Center" 
-                        Content="Сформировать квитанцию" Command="{Binding GenerateReceiptCommand}" Margin="5,0,5,5" />
+                        Content="Сформировать квитанцию" Command="{Binding GenerateReceiptCommand}" Margin="5,0,5,5" Style="{StaticResource ModernButtonStyle}" />
             </Grid>
-            
+
             <Grid Margin="5, 0, 5, 0">
                 <DockPanel>
                     <wv2:WebView2 Name="WordViewer" DockPanel.Dock="Bottom" Height="590" />
                 </DockPanel>
             </Grid>
-            
+
             <Grid Margin="5,0,5,5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-
                 <Button x:Name="SaveButton" Grid.Column="0" Padding="5" HorizontalAlignment="Stretch" VerticalAlignment="Center" 
                         Content="Сохранить квитанцию" Command="{Binding SaveCommand}" Margin="5"
-                        Visibility="Collapsed" />
+                        Visibility="Collapsed" Style="{StaticResource ModernButtonStyle}" />
             </Grid>
-            
+
         </StackPanel>
     </Grid>
 </Window>

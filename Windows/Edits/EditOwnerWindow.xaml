@@ -3,40 +3,91 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
         Title="Изменить информацию о клиенте"  WindowState="Maximized" Height="500" Width="800">
+    
+    <Window.Resources>
+
+        <Style x:Key="ModernButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#FF1E90FF"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Width" Value="200px" />
+            <Setter Property="Height" Value="35px" />
+            <Setter Property="Padding" Value="20 15"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="5" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                BorderBrush="{TemplateBinding BorderBrush}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect ShadowDepth="2" Opacity="0.5"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FF007ACC"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="ModernTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="Padding" Value="0, 5, 0, 5"/>
+        </Style>
+    </Window.Resources>
+
     <Grid Margin="10">
         <StackPanel>
-            <TextBlock Text="Информация о клиенте:" FontWeight="Bold" Margin="0, 0, 0,15" />
-            <TextBlock Text="Фамилия:" />
+
+            <TextBlock Text="Информация о клиенте:" FontWeight="Bold" FontSize="16" Margin="0, 0, 0,15" />
+
+            <TextBlock Text="Фамилия:" Style="{StaticResource ModernTextBlockStyle}" />
             <TextBox Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
-            
-            <TextBlock Text="Имя:" />
+
+            <TextBlock Text="Имя:" Style="{StaticResource ModernTextBlockStyle}" />
             <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
-            
-            <TextBlock Text="Отчество:" />
+
+            <TextBlock Text="Отчество:" Style="{StaticResource ModernTextBlockStyle}" />
             <TextBox Text="{Binding Patronymic, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
-            
-            <TextBlock Text="Адрес прописки:" />
+
+            <TextBlock Text="Адрес прописки:" Style="{StaticResource ModernTextBlockStyle}" />
             <TextBox Text="{Binding Address, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
-            
-            <TextBlock Text="Номер телефона:" />
+
+            <TextBlock Text="Номер телефона:" Style="{StaticResource ModernTextBlockStyle}" />
             <TextBox Text="{Binding Phone, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
 
-            <TextBlock Text="Информация об автомобилях:" FontWeight="Bold" Margin="0, 15, 0,15" />
-            
+            <TextBlock Text="Информация об автомобилях:" FontWeight="Bold" FontSize="16" Margin="0, 15, 0,15" />
+
             <TextBlock Text="Ид:" Visibility="Collapsed" />
             <TextBox Text="{Binding CarId, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" IsEnabled="False" Visibility="Collapsed" />
-            
-            <TextBlock Text="Марка:" />
+
+            <TextBlock Text="Марка:" Style="{StaticResource ModernTextBlockStyle}" />
             <TextBox Text="{Binding Brand, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
-            
-            <TextBlock Text="Модель:" />
+
+            <TextBlock Text="Модель:" Style="{StaticResource ModernTextBlockStyle}" />
             <TextBox Text="{Binding Model, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
-            
-            <TextBlock Text="Гос. номер авто:" />
+
+            <TextBlock Text="Гос. номер авто:" Style="{StaticResource ModernTextBlockStyle}" />
             <TextBox Text="{Binding LicensePlate, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
-            
-            <TextBlock Text="Цвет авто:" />
-            <ComboBox SelectedItem="{Binding SelectedColorString}" Margin="0,0,0,10">
+
+            <TextBlock Text="Цвет авто:" Style="{StaticResource ModernTextBlockStyle}" />
+            <ComboBox SelectedItem="{Binding SelectedColorString}" Margin="0,0,0,10" >
                 <ComboBox.ItemsSource>
                     <x:Array Type="{x:Type system:String}">
                         <system:String>Red</system:String>
@@ -49,8 +100,9 @@
                     </x:Array>
                 </ComboBox.ItemsSource>
             </ComboBox>
-            
-            <Button Content="Сохранить изменения авто" Command="{Binding SaveCarCommand}" Width="100" HorizontalAlignment="Right" Margin="0, 10, 0, 0" />
+
+            <Button Content="Сохранить изменения авто" Command="{Binding SaveCarCommand}" Style="{StaticResource ModernButtonStyle}" />
+
             <ListBox ItemsSource="{Binding Cars}" SelectedItem="{Binding SelectedCar}" Margin="0, 20, 0, 10">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
@@ -63,9 +115,10 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            
-            <Button Content="Сохранить" Command="{Binding ChangeCommand}" Width="100" HorizontalAlignment="Right" />
-            <Button Content="Назад" Command="{Binding RedirectBackCommand}" Width="100" HorizontalAlignment="Right" Margin="0, 10, 0, 0" />
+
+            <Button Content="Сохранить" Command="{Binding ChangeCommand}" Style="{StaticResource ModernButtonStyle}" />
+
+            <Button Content="Назад" Command="{Binding RedirectBackCommand}" Style="{StaticResource ModernButtonStyle}" Margin="0, 10, 0, 0" />
         </StackPanel>
     </Grid>
 </Window>
