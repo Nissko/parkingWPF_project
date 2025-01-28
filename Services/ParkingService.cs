@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Numerics;
 using ParkingWork.Entities.Parking;
 using ParkingWork.Exceptions;
 
@@ -12,7 +13,7 @@ namespace ParkingWork.Services
 
         public event Action<Parkings> ParkingChanged;
 
-        public void AddParking(string parkingName, string parkingAddress, int inn)
+        public void AddParking(string parkingName, string parkingAddress, BigInteger inn)
         {
             if (string.IsNullOrEmpty(parkingName) || string.IsNullOrEmpty(parkingAddress) ||
                 string.IsNullOrEmpty(inn.ToString()))

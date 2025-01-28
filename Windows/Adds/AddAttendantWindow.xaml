@@ -5,13 +5,13 @@
     <Grid Margin="10">
         <StackPanel>
             <TextBlock Text="Фамилия:" />
-            <TextBox Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
+            <TextBox PreviewTextInput="TextBox_FIO_Validate" Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
             
             <TextBlock Text="Имя:" />
-            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
+            <TextBox PreviewTextInput="TextBox_FIO_Validate" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
 
             <TextBlock Text="Отчество:" />
-            <TextBox Text="{Binding Patronymic, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
+            <TextBox PreviewTextInput="TextBox_FIO_Validate" Text="{Binding Patronymic, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
 
             <Button Content="Сохранить" Command="{Binding SaveCommand}" Width="100" HorizontalAlignment="Right" />
             <Button Content="Назад" Command="{Binding RedirectBackCommand}" Width="100" HorizontalAlignment="Right" Margin="0, 10, 0, 0" />

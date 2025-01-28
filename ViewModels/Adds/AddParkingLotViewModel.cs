@@ -68,6 +68,8 @@ namespace ParkingWork.ViewModels.Adds
                     ParkingException.ShowErrorMessage("Заполните все поля!");
                     return;
                 }
+                
+                Name = $"Место №{_name}";
 
                 // TODO: сделать проверку на уникальность места т.е сделать проверку на выбранной парковке 
                 // TODO: сделать проверку на пустую строку(пробелы) 

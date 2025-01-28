@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System.Text.RegularExpressions;
+using System.Windows;
+using System.Windows.Input;
 using ParkingWork.ViewModels.Adds;
 
 namespace ParkingWork.Windows.Adds
@@ -9,6 +11,16 @@ namespace ParkingWork.Windows.Adds
         {
             InitializeComponent();
             DataContext = viewModel;
+        }
+        
+        private void TextBox_FIO_Validate(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("^[А-Яа-яЁё]+$");
+
+            if (!regex.IsMatch(e.Text))
+            {
+                e.Handled = true;
+            }
         }
     }
 }

@@ -27,14 +27,14 @@ namespace ParkingWork.ViewModels.Adds
         private const string _seriesDatas = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 
-        private decimal _price;
+        private string _price;
         private int _days;
         private Parkings _selectedParking;
         private ParkingLots _selectedParkingLot;
         private Owners _selectedOwner;
         private Vehicles _selectedVehicle;
 
-        public decimal Price
+        public string Price
         {
             get => _price;
             set
@@ -183,7 +183,7 @@ namespace ParkingWork.ViewModels.Adds
 
                 if (SelectedParking == null || SelectedParkingLot == null || SelectedOwner == null ||
                     SelectedAttendant == null || SelectedVehicle == null || string.IsNullOrEmpty(Days.ToString()) ||
-                    Price <= 0)
+                    string.IsNullOrEmpty(Price))
                 {
                     ParkingException.ShowErrorMessage("Пожалуйста, заполните все поля.");
                     return;
@@ -194,7 +194,7 @@ namespace ParkingWork.ViewModels.Adds
 
                 var preloadReceipt = new Receipts(seriesReceipt, numberReceipt, SelectedOwner, SelectedParking,
                     SelectedParkingLot,
-                    SelectedAttendant, Days, Price, SelectedVehicle.Id);
+                    SelectedAttendant, Days, decimal.Parse(Price), SelectedVehicle.Id);
 
                 _receiptsListToAdd.Add(preloadReceipt);
 

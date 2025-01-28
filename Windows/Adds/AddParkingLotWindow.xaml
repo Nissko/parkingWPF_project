@@ -4,8 +4,8 @@
         Title="Добавить парковочное место" Height="300" Width="400">
     <Grid Margin="10">
         <StackPanel>
-            <TextBlock Text="Название:" />
-            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
+            <TextBlock Text="Место №:" />
+            <TextBox PreviewTextInput="TextBox_ParkingLot_Validate" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
 
             <TextBlock Text="Выберите стоянку:" />
             <ComboBox ItemsSource="{Binding Parkings}" 

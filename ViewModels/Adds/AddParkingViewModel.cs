@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Numerics;
 using System.Windows;
 using System.Windows.Input;
 using ParkingWork.Exceptions;
@@ -11,7 +12,7 @@ namespace ParkingWork.ViewModels.Adds
     {
         private string _name;
         private string _address;
-        private int _inn;
+        private string _inn;
 
         public string Name
         {
@@ -33,7 +34,7 @@ namespace ParkingWork.ViewModels.Adds
             }
         }
 
-        public int Inn
+        public string Inn
         {
             get => _inn;
             set
@@ -59,13 +60,13 @@ namespace ParkingWork.ViewModels.Adds
         {
             try
             {
-                if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(Address) || string.IsNullOrEmpty(Inn.ToString()))
+                if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(Address) || string.IsNullOrEmpty(Inn))
                 {
                     ParkingException.ShowErrorMessage("Заполните все поля!");
                     return;
                 }
 
-                _parkingService.AddParking(Name, Address, Inn);
+                _parkingService.AddParking(Name, Address, BigInteger.Parse(Inn));
                 ParkingException.ShowSuccessMessage("Стоянка успешно добавлена!");
 
                 // Закрытие окна

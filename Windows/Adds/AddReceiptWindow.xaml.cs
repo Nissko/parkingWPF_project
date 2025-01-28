@@ -1,6 +1,9 @@
 ﻿using System;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using ParkingWork.Exceptions;
 using ParkingWork.ViewModels.Adds;
 
@@ -28,6 +31,40 @@ namespace ParkingWork.Windows.Adds
             WordViewer.CoreWebView2.Navigate("about:blank");
             WordViewer.CoreWebView2.Navigate(new Uri(pdfFilePath).AbsoluteUri);
             SaveButton.Visibility = Visibility.Visible;
+        }
+        
+        private void TextBox_Price_Validate(object sender, TextCompositionEventArgs e)
+        {
+            var regex = new Regex(@"^[0-9,]+$");
+
+            TextBox textBox = sender as TextBox;
+
+            if (!regex.IsMatch(e.Text))
+            {
+                e.Handled = true;
+                return;
+            }
+
+            if (textBox.Text.Contains(",") || textBox.Text.Contains("."))
+            {
+                if (e.Text == "," || e.Text == ".")
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                var parts = textBox.Text.Split(new char[] { ',', '.' });
+                if (parts.Length > 1 && parts[1].Length >= 2)
+                {
+                    e.Handled = true;
+                    return;
+                }
+            }
+
+            if (textBox.Text.Length >= 15)
+            {
+                e.Handled = true;
+            }
         }
     }
 }

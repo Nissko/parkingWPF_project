@@ -6,30 +6,30 @@
         <StackPanel>
             <TextBlock Text="Информация о клиенте:" FontWeight="Bold" Margin="0, 0, 0,15" />
             <TextBlock Text="Фамилия:" />
-            <TextBox Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
+            <TextBox PreviewTextInput="TextBox_FIO_Validate" Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
             
             <TextBlock Text="Имя:" />
-            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
+            <TextBox PreviewTextInput="TextBox_FIO_Validate" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
             
             <TextBlock Text="Отчество:" />
-            <TextBox Text="{Binding Patronymic, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
+            <TextBox PreviewTextInput="TextBox_FIO_Validate" Text="{Binding Patronymic, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
             
             <TextBlock Text="Адрес прописки:" />
-            <TextBox Text="{Binding Address, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
+            <TextBox PreviewTextInput="TextBox_Address_Validate" Text="{Binding Address, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
             
             <TextBlock Text="Номер телефона:" />
-            <TextBox Text="{Binding Phone, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
+            <TextBox Name="textBox_number" PreviewTextInput="TextBox_Phone_Validate" Text="{Binding Phone, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
 
             <TextBlock Text="Информация об автомобилях:" FontWeight="Bold" Margin="0, 15, 0,15" />
             
             <TextBlock Text="Марка:" />
-            <TextBox Text="{Binding Brand, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
+            <TextBox PreviewTextInput="TextBox_Brand_Validate" Text="{Binding Brand, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
             
             <TextBlock Text="Модель:" />
-            <TextBox Text="{Binding Model, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
+            <TextBox PreviewTextInput="TextBox_Model_Validate" Text="{Binding Model, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
             
             <TextBlock Text="Гос. номер авто:" />
-            <TextBox Text="{Binding LicensePlate, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
+            <TextBox PreviewTextInput="TextBox_LicensePlate_Validate" Text="{Binding LicensePlate, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
             
             <TextBlock Text="Цвет авто:" />
             <ComboBox SelectedItem="{Binding SelectedColor}" Margin="0,0,0,10">
