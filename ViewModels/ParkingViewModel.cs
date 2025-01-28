@@ -13,6 +13,7 @@ using ParkingWork.Entities.Owner;
 using ParkingWork.Entities.Parking;
 using ParkingWork.Entities.Parking.Receipt;
 using ParkingWork.Entities.Vehicle;
+using ParkingWork.Exceptions;
 using ParkingWork.Services;
 using ParkingWork.ViewModels.Adds;
 using ParkingWork.ViewModels.Edits;
@@ -126,7 +127,6 @@ namespace ParkingWork.ViewModels
 
             #region Подписание на события изменения
 
-            // TODO: предусмотреть изменения в других коллекциях (проверить)
             _parkingService.ParkingChanged += parking =>
             {
                 if (parking == null) return;
@@ -299,7 +299,7 @@ namespace ParkingWork.ViewModels
             }
             else
             {
-                MessageBox.Show("Файл Excel не найден.", "Ошибка");
+                ParkingException.ShowErrorMessage("Файл Excel не найден.");
             }
         }
 
@@ -313,7 +313,7 @@ namespace ParkingWork.ViewModels
             }
             else
             {
-                MessageBox.Show("Файл Excel не найден.", "Ошибка");
+                ParkingException.ShowErrorMessage("Файл Excel не найден.");
             }
         }
 
@@ -327,7 +327,7 @@ namespace ParkingWork.ViewModels
             }
             else
             {
-                MessageBox.Show("Файл Excel не найден.", "Ошибка");
+                ParkingException.ShowErrorMessage("Файл Excel не найден.");
             }
         }
 
@@ -341,7 +341,7 @@ namespace ParkingWork.ViewModels
             }
             else
             {
-                MessageBox.Show("Файл Excel не найден.", "Ошибка");
+                ParkingException.ShowErrorMessage("Файл Excel не найден.");
             }
         }
 
@@ -355,7 +355,7 @@ namespace ParkingWork.ViewModels
             }
             else
             {
-                MessageBox.Show("Файл Excel не найден.", "Ошибка");
+                ParkingException.ShowErrorMessage("Файл Excel не найден.");
             }
         }
         
@@ -370,7 +370,7 @@ namespace ParkingWork.ViewModels
             }
             else
             {
-                MessageBox.Show("Файл Excel не найден.", "Ошибка");
+                ParkingException.ShowErrorMessage("Файл Excel не найден.");
             }
         }
 
@@ -553,13 +553,11 @@ namespace ParkingWork.ViewModels
                 try
                 {
                     File.Copy(pdfFilePath, saveFileDialog.FileName, true);
-                    MessageBox.Show("Квитанция успешно сохранена!", "Успех", MessageBoxButton.OK,
-                        MessageBoxImage.Information);
+                    ParkingException.ShowSuccessMessage("Квитанция успешно сохранена!");
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Ошибка при сохранении файла: {ex.Message}", "Ошибка", MessageBoxButton.OK,
-                        MessageBoxImage.Error);
+                    ParkingException.ShowErrorMessage($"Ошибка при сохранении файла: {ex.Message}");
                 }
         }
 

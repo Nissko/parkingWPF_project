@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows;
+using ParkingWork.Exceptions;
 using ParkingWork.ViewModels.Adds;
 
 namespace ParkingWork.Windows.Adds
@@ -18,7 +19,7 @@ namespace ParkingWork.Windows.Adds
         {
             if (!File.Exists(pdfFilePath))
             {
-                MessageBox.Show("Файл PDF не найден!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                ParkingException.ShowErrorMessage("Файл PDF не найден!");
                 return;
             }
             

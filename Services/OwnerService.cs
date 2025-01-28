@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using ParkingWork.Entities.Owner;
 using ParkingWork.Entities.Vehicle;
+using ParkingWork.Exceptions;
 
 namespace ParkingWork.Services
 {
@@ -18,7 +19,8 @@ namespace ParkingWork.Services
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(surname) || string.IsNullOrEmpty(patronymic) ||
                 string.IsNullOrEmpty(address) || string.IsNullOrEmpty(phone) || vehiclesEnumerable.Count == 0) 
             {
-                throw new ArgumentException("Все поля должны быть заполнены.");
+                ParkingException.ShowErrorMessage("Все поля должны быть заполнены.");
+                return;
             }
 
             var newOwner = new Owners(clientId, name, surname, patronymic, address, phone, vehiclesEnumerable);

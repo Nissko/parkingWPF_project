@@ -2,24 +2,27 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using ParkingWork.Entities.Parking;
+using ParkingWork.Exceptions;
 
 namespace ParkingWork.Services
 {
     public class ParkingService
     {
         public event Action<Parkings> ParkingAdded;
-        
+
         public event Action<Parkings> ParkingChanged;
 
         public void AddParking(string parkingName, string parkingAddress, int inn)
         {
-            if (string.IsNullOrEmpty(parkingName) || string.IsNullOrEmpty(parkingAddress) || string.IsNullOrEmpty(inn.ToString()))
+            if (string.IsNullOrEmpty(parkingName) || string.IsNullOrEmpty(parkingAddress) ||
+                string.IsNullOrEmpty(inn.ToString()))
             {
-                throw new ArgumentException("Все поля должны быть заполнены.");
+                ParkingException.ShowErrorMessage("Все поля должны быть заполнены.");
+                return;
             }
 
             var newParking = new Parkings(Guid.NewGuid(), parkingName, parkingAddress, inn);
-            
+
             ParkingAdded?.Invoke(newParking);
         }
 

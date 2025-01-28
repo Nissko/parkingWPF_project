@@ -9,6 +9,7 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.Win32;
 using ParkingWork.Entities.Parking.Receipt;
+using ParkingWork.Exceptions;
 using Word = Microsoft.Office.Interop.Word;
 
 namespace ParkingWork.Services
@@ -20,9 +21,12 @@ namespace ParkingWork.Services
 
         public string GenerateReceipt(Dictionary<string, string> replacements)
         {
-            //TODO: Exception
             if (replacements == null || !replacements.Any())
-                throw new ArgumentException("Словарь замен не может быть пустым.", nameof(replacements));
+            {
+                ParkingException.ShowErrorMessage("Словарь замен не может быть пустым.");
+                return string.Empty;
+            }
+            
 
             try
             {
@@ -32,9 +36,11 @@ namespace ParkingWork.Services
                 {
                     var body = wordDoc.MainDocumentPart?.Document.Body;
 
-                    //TODO: Exception
                     if (body == null)
-                        throw new InvalidOperationException("Шаблон пустой или не содержит тела документа.");
+                    {
+                        ParkingException.ShowErrorMessage("Шаблон пустой или не содержит тела документа.");
+                        return string.Empty;
+                    }
 
                     foreach (var element in body.Elements())
                     {
@@ -55,8 +61,7 @@ namespace ParkingWork.Services
             }
             catch (Exception ex)
             {
-                //TODO: Exception
-                Console.WriteLine($"Ошибка при обработке документа: {ex.Message}");
+                ParkingException.ShowErrorMessage($"Ошибка при обработке документа: {ex.Message}");
                 return string.Empty;
             }
         }
@@ -74,7 +79,7 @@ namespace ParkingWork.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Ошибка: {ex.Message}");
+                ParkingException.ShowErrorMessage($"Ошибка: {ex.Message}");
                 return string.Empty;
             }
             finally
@@ -113,10 +118,17 @@ namespace ParkingWork.Services
                     {
                         var mainDocumentPart = wordDoc.MainDocumentPart;
                         if (mainDocumentPart == null)
-                            throw new Exception("Ошибка при создании основного раздела документа.");
+                        {
+                            ParkingException.ShowErrorMessage("Ошибка при создании основного раздела документа.");
+                            return;
+                        }
 
                         var body = mainDocumentPart.Document.Body;
-                        if (body == null) throw new Exception("Шаблон пустой");
+                        if (body == null)
+                        {
+                            ParkingException.ShowErrorMessage("Шаблон пустой");
+                            return;
+                        }
 
                         var templateBody = body.CloneNode(true);
 
@@ -183,13 +195,11 @@ namespace ParkingWork.Services
 
                     File.Copy(tempOutputPath, filePath, true);
 
-                    MessageBox.Show("Все квитанции успешно сохранены в один Word файл!", "Успех", MessageBoxButton.OK,
-                        MessageBoxImage.Information);
+                    ParkingException.ShowSuccessMessage("Все квитанции успешно сохранены в один Word файл!");
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Ошибка при сохранении файла: {ex.Message}", "Ошибка", MessageBoxButton.OK,
-                        MessageBoxImage.Error);
+                    ParkingException.ShowErrorMessage($"Ошибка при загрузке данных из Excel: {ex.Message}");
                 }
         }
         
@@ -198,9 +208,11 @@ namespace ParkingWork.Services
         /// </summary>
         private void ReplaceTextInParagraph(Paragraph paragraph, Dictionary<string, string> replacements)
         {
-            //TODO: Exception
             if (paragraph == null || replacements == null || !replacements.Any())
+            {
+                ParkingException.ShowErrorMessage("Невозможно изменить текст в абзаце.");
                 return;
+            }
 
             foreach (var run in paragraph.Elements<Run>())
             {
@@ -223,9 +235,11 @@ namespace ParkingWork.Services
         /// </summary>
         private void ReplaceTextInTable(Table table, Dictionary<string, string> replacements)
         {
-            //TODO: Exception
             if (table == null || replacements == null || !replacements.Any())
+            {
+                ParkingException.ShowErrorMessage("Невозможно изменить текст в таблице.");
                 return;
+            }
 
             foreach (var row in table.Elements<TableRow>())
             {

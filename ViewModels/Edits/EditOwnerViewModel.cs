@@ -7,6 +7,7 @@ using System.Windows.Input;
 using ParkingWork.Entities.Owner;
 using ParkingWork.Entities.Vehicle;
 using ParkingWork.Entities.Vehicle.Enum;
+using ParkingWork.Exceptions;
 using ParkingWork.Services;
 
 namespace ParkingWork.ViewModels.Edits
@@ -151,7 +152,7 @@ namespace ParkingWork.ViewModels.Edits
         {
             if (string.IsNullOrEmpty(CarId))
             {
-                MessageBox.Show("Не выбрана машина", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                ParkingException.ShowErrorMessage("Не выбрана машина");
                 return;
             }
             
@@ -185,15 +186,14 @@ namespace ParkingWork.ViewModels.Edits
 
                 _ownerService.ChangeOwner(OwnersList, _ownerChange.Id);
 
-                MessageBox.Show("Изменения успешно сохранены!", "Успех", MessageBoxButton.OK,
-                    MessageBoxImage.Information);
+                ParkingException.ShowSuccessMessage("Изменения успешно сохранены!");
 
                 // Закрытие окна
                 Application.Current.Windows[1]?.Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                ParkingException.ShowErrorMessage(ex.Message);
             }
         }
 

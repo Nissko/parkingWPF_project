@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 using ParkingWork.Entities.Parking;
+using ParkingWork.Exceptions;
 using ParkingWork.Services;
 
 namespace ParkingWork.ViewModels.Adds
@@ -32,7 +33,7 @@ namespace ParkingWork.ViewModels.Adds
                 OnPropertyChanged(nameof(ParkingId));
             }
         }
-        
+
         public ObservableCollection<Parkings> Parkings { get; set; }
         public Parkings SelectedParking { get; set; }
 
@@ -41,11 +42,12 @@ namespace ParkingWork.ViewModels.Adds
 
         private readonly ParkingLotService _parkingLotServiceService;
 
-        public AddParkingLotViewModel(ParkingLotService parkingLotServiceService, ObservableCollection<Parkings> parkingsList)
+        public AddParkingLotViewModel(ParkingLotService parkingLotServiceService,
+            ObservableCollection<Parkings> parkingsList)
         {
             _parkingLotServiceService = parkingLotServiceService;
             Parkings = parkingsList;
-            
+
             SaveCommand = new RelayCommand(Save);
             RedirectBackCommand = new RelayCommand(RedirectBack);
         }
@@ -56,26 +58,32 @@ namespace ParkingWork.ViewModels.Adds
             {
                 if (SelectedParking == null)
                 {
-                    MessageBox.Show("Пожалуйста, выберите стоянку.", "Указаны не все данные!");
+                    ParkingException.ShowErrorMessage("Пожалуйста, выберите стоянку.");
                     return;
                 }
-                
+
+                if (string.IsNullOrEmpty(Name) || SelectedParking.Id == Guid.Empty ||
+                    string.IsNullOrEmpty(SelectedParking.Name))
+                {
+                    ParkingException.ShowErrorMessage("Заполните все поля!");
+                    return;
+                }
+
                 // TODO: сделать проверку на уникальность места т.е сделать проверку на выбранной парковке 
                 // TODO: сделать проверку на пустую строку(пробелы) 
-                
+
                 _parkingLotServiceService.AddParkingLot(Name, SelectedParking.Id.ToString(), SelectedParking.Name);
-                MessageBox.Show("Парковочное место успешно добавлено!", "Успех", MessageBoxButton.OK,
-                    MessageBoxImage.Information);
+                ParkingException.ShowSuccessMessage("Парковочное место успешно добавлено!");
 
                 // Закрытие окна
                 Application.Current.Windows[1]?.Close();
             }
             catch (ArgumentException ex)
             {
-                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                ParkingException.ShowErrorMessage(ex.Message);
             }
         }
-        
+
         private void RedirectBack(object parameter)
         {
             Application.Current.Windows[1]?.Close();

@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
+using ParkingWork.Exceptions;
 using ParkingWork.Services;
 
 namespace ParkingWork.ViewModels.Adds
@@ -58,18 +59,24 @@ namespace ParkingWork.ViewModels.Adds
         {
             try
             {
+                if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(Surname) || string.IsNullOrEmpty(Patronymic))
+                {
+                    ParkingException.ShowErrorMessage("Заполните все поля!");
+                    return;
+                }
+
                 _attendantService.AddAttendant(Name, Surname, Patronymic);
-                MessageBox.Show("Кладовщик успешно добавлен!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                ParkingException.ShowSuccessMessage("Кладовщик успешно добавлен!");
 
                 // Закрытие окна
                 Application.Current.Windows[1]?.Close();
             }
             catch (ArgumentException ex)
             {
-                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                ParkingException.ShowErrorMessage(ex.Message);
             }
         }
-        
+
         private void RedirectBack(object parameter)
         {
             Application.Current.Windows[1]?.Close();

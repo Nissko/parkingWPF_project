@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using ParkingWork.Entities.Parking;
+using ParkingWork.Exceptions;
 
 namespace ParkingWork.Services
 {
@@ -14,7 +15,8 @@ namespace ParkingWork.Services
         {
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(parkingId))
             {
-                throw new ArgumentException("Все поля должны быть заполнены.");
+                ParkingException.ShowErrorMessage("Все поля должны быть заполнены.");
+                return;
             }
 
             var newParkingLot = new ParkingLots(Guid.NewGuid(), Guid.Parse(parkingId), name, parkingName, true);

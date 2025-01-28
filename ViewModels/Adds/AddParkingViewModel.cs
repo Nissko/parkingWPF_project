@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
+using ParkingWork.Exceptions;
 using ParkingWork.Services;
 
 namespace ParkingWork.ViewModels.Adds
@@ -31,7 +32,7 @@ namespace ParkingWork.ViewModels.Adds
                 OnPropertyChanged(nameof(Address));
             }
         }
-        
+
         public int Inn
         {
             get => _inn;
@@ -58,18 +59,24 @@ namespace ParkingWork.ViewModels.Adds
         {
             try
             {
+                if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(Address) || string.IsNullOrEmpty(Inn.ToString()))
+                {
+                    ParkingException.ShowErrorMessage("Заполните все поля!");
+                    return;
+                }
+
                 _parkingService.AddParking(Name, Address, Inn);
-                MessageBox.Show("Стоянка успешно добавлена!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                ParkingException.ShowSuccessMessage("Стоянка успешно добавлена!");
 
                 // Закрытие окна
                 Application.Current.Windows[1]?.Close();
             }
             catch (ArgumentException ex)
             {
-                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                ParkingException.ShowErrorMessage(ex.Message);
             }
         }
-        
+
         private void RedirectBack(object parameter)
         {
             Application.Current.Windows[1]?.Close();

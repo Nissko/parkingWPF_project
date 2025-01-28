@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using ParkingWork.Entities.Attendants;
+using ParkingWork.Exceptions;
 
 namespace ParkingWork.Services
 {
@@ -13,7 +14,11 @@ namespace ParkingWork.Services
         public void AddAttendant(string name, string surname, string patronymic)
         {
             if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(surname) ||
-                string.IsNullOrWhiteSpace(patronymic)) throw new ArgumentException("Все поля должны быть заполнены.");
+                string.IsNullOrWhiteSpace(patronymic))
+            {
+                ParkingException.ShowErrorMessage("Все поля должны быть заполнены.");
+                return;
+            }
 
             var newAttendant = new Attendants(Guid.NewGuid(), name, surname, patronymic);
 
@@ -22,7 +27,11 @@ namespace ParkingWork.Services
 
         public void EditAttendant(ObservableCollection<Attendants> attendants, Guid id)
         {
-            if (!attendants.Any()) throw new ArgumentNullException("Не удалось получить данные по кладовщикам.");
+            if (!attendants.Any())
+            {
+                ParkingException.ShowErrorMessage("Не удалось получить данные по кладовщикам.");
+                return;
+            }
             
             var attendant = attendants.FirstOrDefault(x => x.Id == id);
             

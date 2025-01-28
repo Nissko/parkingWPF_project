@@ -13,6 +13,7 @@ using ParkingWork.Entities.Parking;
 using ParkingWork.Entities.Parking.Receipt;
 using ParkingWork.Entities.Vehicle;
 using ParkingWork.Entities.Vehicle.Enum;
+using ParkingWork.Exceptions;
 
 namespace ParkingWork.Services
 {
@@ -36,7 +37,7 @@ namespace ParkingWork.Services
 
                     if (worksheet == null)
                     {
-                        MessageBox.Show($"Лист с именем '{listName}' не найден", "Ошибка");
+                        ParkingException.ShowErrorMessage($"Лист с именем '{listName}' не найден");
                         return attendants;
                     }
                     
@@ -61,7 +62,7 @@ namespace ParkingWork.Services
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при загрузке данных из Excel: {ex.Message}",$"Ошибка");
+                ParkingException.ShowErrorMessage($"Ошибка при загрузке данных из Excel: {ex.Message}");
             }
 
             return attendants;
@@ -87,7 +88,7 @@ namespace ParkingWork.Services
 
                     if (worksheet == null)
                     {
-                        MessageBox.Show($"Лист с именем '{listName}' не найден", "Ошибка");
+                        ParkingException.ShowErrorMessage($"Лист с именем '{listName}' не найден");
                         return owners;
                     }
                     
@@ -118,7 +119,7 @@ namespace ParkingWork.Services
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при загрузке данных из Excel: {ex.Message}",$"Ошибка");
+                ParkingException.ShowErrorMessage($"Ошибка при загрузке данных из Excel: {ex.Message}");
             }
 
             return owners;
@@ -143,7 +144,7 @@ namespace ParkingWork.Services
 
                     if (worksheet == null)
                     {
-                        MessageBox.Show($"Лист с именем '{listName}' не найден", "Ошибка");
+                        ParkingException.ShowErrorMessage($"Лист с именем '{listName}' не найден");
                         return carsExcel;
                     }
                     
@@ -177,7 +178,7 @@ namespace ParkingWork.Services
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при загрузке данных из Excel: {ex.Message}",$"Ошибка");
+                ParkingException.ShowErrorMessage($"Ошибка при загрузке данных из Excel: {ex.Message}");
             }
 
             return carsExcel;
@@ -203,7 +204,7 @@ namespace ParkingWork.Services
 
                     if (worksheet == null)
                     {
-                        MessageBox.Show($"Лист с именем '{listName}' не найден", "Ошибка");
+                        ParkingException.ShowErrorMessage($"Лист с именем '{listName}' не найден");
                         return parkingLots;
                     }
                     
@@ -233,7 +234,7 @@ namespace ParkingWork.Services
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при загрузке данных из Excel: {ex.Message}",$"Ошибка");
+                ParkingException.ShowErrorMessage($"Ошибка при загрузке данных из Excel: {ex.Message}");
             }
 
             return parkingLots;
@@ -253,7 +254,7 @@ namespace ParkingWork.Services
 
                     if (worksheet == null)
                     {
-                        MessageBox.Show($"Лист с именем '{listName}' не найден", "Ошибка");
+                        ParkingException.ShowErrorMessage($"Лист с именем '{listName}' не найден");
                         return parkingName;
                     }
                     
@@ -274,7 +275,7 @@ namespace ParkingWork.Services
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при загрузке данных из Excel: {ex.Message}",$"Ошибка");
+                ParkingException.ShowErrorMessage($"Ошибка при загрузке данных из Excel: {ex.Message}");
             }
 
             return parkingName;
@@ -300,7 +301,7 @@ namespace ParkingWork.Services
 
                     if (worksheet == null)
                     {
-                        MessageBox.Show($"Лист с именем '{listName}' не найден", "Ошибка");
+                        ParkingException.ShowErrorMessage($"Лист с именем '{listName}' не найден");
                         return parkings;
                     }
                     
@@ -324,7 +325,7 @@ namespace ParkingWork.Services
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при загрузке данных из Excel: {ex.Message}",$"Ошибка");
+                ParkingException.ShowErrorMessage($"Ошибка при загрузке данных из Excel: {ex.Message}");
             }
 
             return parkings;
@@ -350,7 +351,7 @@ namespace ParkingWork.Services
 
                     if (worksheet == null)
                     {
-                        MessageBox.Show($"Лист с именем '{listName}' не найден", "Ошибка");
+                        ParkingException.ShowErrorMessage($"Лист с именем '{listName}' не найден");
                         return vehicles;
                     }
                     
@@ -382,7 +383,7 @@ namespace ParkingWork.Services
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при загрузке данных из Excel: {ex.Message}",$"Ошибка");
+                ParkingException.ShowErrorMessage($"Ошибка при загрузке данных из Excel: {ex.Message}");
             }
 
             return vehicles;
@@ -411,7 +412,7 @@ namespace ParkingWork.Services
 
                     if (worksheet == null)
                     {
-                        MessageBox.Show($"Лист с именем '{listName}' не найден", "Ошибка");
+                        ParkingException.ShowErrorMessage($"Лист с именем '{listName}' не найден");
                         return receipts;
                     }
 
@@ -461,7 +462,7 @@ namespace ParkingWork.Services
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при загрузке данных из Excel: {ex.Message}", $"Ошибка");
+                ParkingException.ShowErrorMessage($"Ошибка при загрузке данных из Excel: {ex.Message}");
             }
 
             return receipts;

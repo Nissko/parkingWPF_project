@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using ParkingWork.Entities.Attendants;
+using ParkingWork.Exceptions;
 using ParkingWork.Services;
 
 namespace ParkingWork.ViewModels.Edits
@@ -81,15 +82,14 @@ namespace ParkingWork.ViewModels.Edits
 
                 _attendantService.EditAttendant(Attendants, _attendantChange.Id);
 
-                MessageBox.Show("Кладовщик успешно изменен!", "Успех", MessageBoxButton.OK,
-                    MessageBoxImage.Information);
+                ParkingException.ShowSuccessMessage("Кладовщик успешно изменен!");
 
                 // Закрытие окна
                 Application.Current.Windows[1]?.Close();
             }
             catch (ArgumentException ex)
             {
-                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                ParkingException.ShowErrorMessage(ex.Message);
             }
         }
         

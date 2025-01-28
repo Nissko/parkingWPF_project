@@ -148,7 +148,6 @@
     <Compile Include="ViewModels\Edits\EditParkingViewModel.cs" />
     <Compile Include="ViewModels\ParkingViewModel.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />
-    <Compile Include="ViewModels\SaveToExcelCommand.cs" />
     <Compile Include="ViewModels\Stats\ParkingIncomeStatisticsViewModel.cs" />
     <Compile Include="ViewModels\Stats\StatisticsViewModel.cs" />
     <Compile Include="Windows\Adds\AddAttendantWindow.xaml.cs">

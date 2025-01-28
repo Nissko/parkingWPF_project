@@ -3,6 +3,7 @@ using ParkingWork.Entities.Attendants;
 using ParkingWork.Entities.Owner;
 using ParkingWork.Entities.Parking;
 using ParkingWork.Entities.Parking.Receipt;
+using ParkingWork.Exceptions;
 
 namespace ParkingWork.Services
 {
@@ -17,7 +18,8 @@ namespace ParkingWork.Services
                 string.IsNullOrEmpty(price.ToString()) || owner == null || parking == null || parkingLot == null ||
                 attendant == null)
             {
-                throw new ArgumentException("Все поля должны быть заполнены.");
+                ParkingException.ShowErrorMessage("Все поля должны быть заполнены.");
+                return;
             }
 
             var newReceipt = new Receipts(series: series, number: number, owner: owner, parking: parking,

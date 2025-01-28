@@ -5,11 +5,12 @@ using System.Windows;
 using System.Windows.Input;
 using ParkingWork.Entities.Vehicle;
 using ParkingWork.Entities.Vehicle.Enum;
+using ParkingWork.Exceptions;
 using ParkingWork.Services;
 
 namespace ParkingWork.ViewModels.Adds
 {
-    public class AddOwnerViewModel: INotifyPropertyChanged
+    public class AddOwnerViewModel : INotifyPropertyChanged
     {
         public string Surname { get; set; }
         public string Name { get; set; }
@@ -20,6 +21,7 @@ namespace ParkingWork.ViewModels.Adds
         public ObservableCollection<Vehicles> Cars { get; set; } = new ObservableCollection<Vehicles>();
 
         private string _brand;
+
         public string Brand
         {
             get => _brand;
@@ -31,6 +33,7 @@ namespace ParkingWork.ViewModels.Adds
         }
 
         private string _model;
+
         public string Model
         {
             get => _model;
@@ -42,6 +45,7 @@ namespace ParkingWork.ViewModels.Adds
         }
 
         private string _licensePlate;
+
         public string LicensePlate
         {
             get => _licensePlate;
@@ -51,9 +55,9 @@ namespace ParkingWork.ViewModels.Adds
                 OnPropertyChanged(nameof(LicensePlate));
             }
         }
-        
-        /*TODO: исправить вывод на ComboBox*/
+
         private VehicleColorEnums _selectedColor;
+
         public VehicleColorEnums SelectedColor
         {
             get => _selectedColor;
@@ -63,8 +67,8 @@ namespace ParkingWork.ViewModels.Adds
                 OnPropertyChanged(nameof(SelectedColor));
             }
         }
-        
-        private Guid _newClientId = Guid.NewGuid();
+
+        private readonly Guid _newClientId = Guid.NewGuid();
 
         public ICommand AddCarCommand { get; }
         public ICommand SaveCommand { get; }
@@ -75,7 +79,7 @@ namespace ParkingWork.ViewModels.Adds
         public AddOwnerViewModel(OwnerService ownerService)
         {
             _ownerService = ownerService;
-            
+
             AddCarCommand = new RelayCommand(AddCar);
             SaveCommand = new RelayCommand(Save);
             RedirectBackCommand = new RelayCommand(RedirectBack);
@@ -86,12 +90,10 @@ namespace ParkingWork.ViewModels.Adds
             if (string.IsNullOrEmpty(LicensePlate) || string.IsNullOrEmpty(Brand) || string.IsNullOrEmpty(Model) ||
                 string.IsNullOrEmpty(_selectedColor.ToString()))
             {
-                MessageBox.Show("Невозможно добавить авто! Заполните все поля!",
-                    "Ошибка", MessageBoxButton.OK, MessageBoxImage.Information);
-                
+                ParkingException.ShowErrorMessage("Невозможно добавить авто! Заполните все поля!");
                 return;
             }
-            
+
             Cars.Add(new Vehicles(Guid.NewGuid(), _newClientId, LicensePlate, Brand, Model, _selectedColor));
 
             // Очистка формы
@@ -100,24 +102,31 @@ namespace ParkingWork.ViewModels.Adds
             LicensePlate = string.Empty;
             SelectedColor = VehicleColorEnums.Red;
         }
-        
+
         private void Save(object parameter)
         {
             try
             {
+                if (_newClientId == Guid.Empty || string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(Surname) ||
+                    string.IsNullOrEmpty(Patronymic) || string.IsNullOrEmpty(Address) || string.IsNullOrEmpty(Phone) ||
+                    Cars.Count == 0)
+                {
+                    ParkingException.ShowErrorMessage("Заполните все поля!");
+                    return;
+                }
+
                 _ownerService.AddOwner(_newClientId, Name, Surname, Patronymic, Address, Phone, Cars);
-                MessageBox.Show("Клиент успешно добавлен!",
-                    "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                ParkingException.ShowSuccessMessage("Клиент успешно добавлен!");
 
                 // Закрытие окна
                 Application.Current.Windows[1]?.Close();
             }
             catch (ArgumentException ex)
             {
-                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                ParkingException.ShowErrorMessage(ex.Message);
             }
         }
-        
+
         private void RedirectBack(object parameter)
         {
             Application.Current.Windows[1]?.Close();

@@ -6,6 +6,7 @@ using System.Numerics;
 using System.Windows;
 using System.Windows.Input;
 using ParkingWork.Entities.Parking;
+using ParkingWork.Exceptions;
 using ParkingWork.Services;
 
 namespace ParkingWork.ViewModels.Edits
@@ -82,14 +83,14 @@ namespace ParkingWork.ViewModels.Edits
 
                 _parkingService.EditParking(Parkings, _parkingChange.Id);
 
-                MessageBox.Show("Стоянка успешно изменена!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
-
+                ParkingException.ShowSuccessMessage("Стоянка успешно изменена!");
+                    
                 // Закрытие окна
                 Application.Current.Windows[1]?.Close();
             }
             catch (ArgumentException ex)
             {
-                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                ParkingException.ShowErrorMessage(ex.Message);
             }
         }
         
