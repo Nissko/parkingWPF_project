@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
-using System.Windows;
 using OfficeOpenXml;
 using ParkingWork.Entities.Owner;
 using ParkingWork.Entities.Parking;
@@ -21,44 +20,47 @@ namespace ParkingWork.Services
     {
         #region Attendants
 
-        public async Task<List<Attendants>> LoadAttendantsFromExcel(string filePath)
+        public static async Task<List<Attendants>> LoadAttendantsFromExcel(string filePath)
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            
+
             var attendants = new List<Attendants>();
 
             try
             {
-                using (var package = new ExcelPackage(new FileInfo(filePath)))
+                await Task.Run(() =>
                 {
-                    var listName = "Attendants";
-                    
-                    var worksheet = package.Workbook.Worksheets.FirstOrDefault(ws => ws.Name == listName);
-
-                    if (worksheet == null)
+                    using (var package = new ExcelPackage(new FileInfo(filePath)))
                     {
-                        ParkingException.ShowErrorMessage($"Лист с именем '{listName}' не найден");
-                        return attendants;
+                        var listName = "Attendants";
+
+                        var worksheet = package.Workbook.Worksheets.FirstOrDefault(ws => ws.Name == listName);
+
+                        if (worksheet == null)
+                        {
+                            ParkingException.ShowErrorMessage($"Лист с именем '{listName}' не найден");
+                            return;
+                        }
+
+                        int rowCount = worksheet.Dimension.Rows;
+
+                        for (int row = 2; row <= rowCount; row++)
+                        {
+                            var id = worksheet.Cells[row, 1].Text; // Идентификатор
+                            var name = worksheet.Cells[row, 2].Text; // Имя
+                            var surname = worksheet.Cells[row, 3].Text; // Фамилия
+                            var patronymic = worksheet.Cells[row, 4].Text; // Отчество
+
+                            if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(name) || string.IsNullOrEmpty(surname) ||
+                                string.IsNullOrEmpty(patronymic))
+                                continue;
+
+                            var attendant = new Attendants(Guid.Parse(id), name, surname, patronymic);
+
+                            attendants.Add(attendant);
+                        }
                     }
-                    
-                    int rowCount = worksheet.Dimension.Rows;
-
-                    for (int row = 2; row <= rowCount; row++)
-                    {
-                        var id = worksheet.Cells[row, 1].Text; // Идентификатор
-                        var name = worksheet.Cells[row, 2].Text; // Имя
-                        var surname = worksheet.Cells[row, 3].Text; // Фамилия
-                        var patronymic = worksheet.Cells[row, 4].Text; // Отчество
-
-                        if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(name) || string.IsNullOrEmpty(surname) ||
-                            string.IsNullOrEmpty(patronymic)) 
-                            continue;
-
-                        var attendant = new Attendants(Guid.Parse(id), name, surname, patronymic);
-
-                        attendants.Add(attendant);
-                    }
-                }
+                });
             }
             catch (Exception ex)
             {
@@ -128,53 +130,65 @@ namespace ParkingWork.Services
         /// <summary>
         /// Получение всех авто клиентов
         /// </summary>
-        public async Task<List<Vehicles>> GetAllOwnersVehicles(Guid clientId, string filePath)
+        private static async Task<List<Vehicles>> GetAllOwnersVehicles(Guid clientId, string filePath)
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            
+
             var carsExcel = new List<Vehicles>();
-            
+
             try
             {
-                using (var package = new ExcelPackage(new FileInfo(filePath)))
+                await Task.Run(() =>
                 {
-                    var listName = "Vehicles";
-                    
-                    var worksheet = package.Workbook.Worksheets.FirstOrDefault(ws => ws.Name == listName);
-
-                    if (worksheet == null)
+                    using (var package = new ExcelPackage(new FileInfo(filePath)))
                     {
-                        ParkingException.ShowErrorMessage($"Лист с именем '{listName}' не найден");
-                        return carsExcel;
-                    }
-                    
-                    int rowCount = worksheet.Dimension.Rows;
+                        var listName = "Vehicles";
 
-                    for (int row = 2; row <= rowCount; row++)
-                    {
-                        var clientExcelId = worksheet.Cells[row, 2].Text;
+                        var worksheet = package.Workbook.Worksheets.FirstOrDefault(ws => ws.Name == listName);
 
-                        if (Guid.Parse(clientExcelId) != clientId) continue;
-
-                        var id = worksheet.Cells[row, 1].Text;
-                        var licensePlate = worksheet.Cells[row, 3].Text; // Номер
-                        var brand = worksheet.Cells[row, 4].Text; // Марка авто
-                        var model = worksheet.Cells[row, 5].Text; // Модель авто
-                        var color = worksheet.Cells[row, 6].Text; // Цвет
-
-                        if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(licensePlate) ||
-                            string.IsNullOrEmpty(brand) || string.IsNullOrEmpty(model) || string.IsNullOrEmpty(color)) 
+                        if (worksheet == null)
                         {
-                            continue;
+                            ParkingException.ShowErrorMessage($"Лист с именем '{listName}' не найден");
+                            return;
                         }
 
-                        var intColor = int.Parse(color);
-                        var colorEnum = (VehicleColorEnums)intColor;
-                        
-                        var car = new Vehicles(Guid.Parse(id), clientId, licensePlate, brand, model, colorEnum);
-                        carsExcel.Add(car);
+                        int rowCount = worksheet.Dimension.Rows;
+
+                        for (int row = 2; row <= rowCount; row++)
+                        {
+                            var clientExcelId = worksheet.Cells[row, 2].Text;
+
+                            if (Guid.Parse(clientExcelId) != clientId) continue;
+
+                            var id = worksheet.Cells[row, 1].Text;
+                            var licensePlate = worksheet.Cells[row, 3].Text; // Номер
+                            var brand = worksheet.Cells[row, 4].Text; // Марка авто
+                            var model = worksheet.Cells[row, 5].Text; // Модель авто
+                            var color = worksheet.Cells[row, 6].Text; // Цвет
+
+                            if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(licensePlate) ||
+                                string.IsNullOrEmpty(brand) || string.IsNullOrEmpty(model) ||
+                                string.IsNullOrEmpty(color))
+                            {
+                                continue;
+                            }
+
+                            var intColor = int.Parse(color);
+                            var colorEnum = (VehicleColorEnums)intColor;
+
+                            var car = new Vehicles(
+                                Guid.Parse(id),
+                                clientId,
+                                licensePlate,
+                                brand,
+                                model,
+                                colorEnum
+                            );
+
+                            carsExcel.Add(car);
+                        }
                     }
-                }
+                });
             }
             catch (Exception ex)
             {
@@ -188,7 +202,7 @@ namespace ParkingWork.Services
 
         #region ParkingLots
 
-        public async Task<List<ParkingLots>> LoadParkingLotsFromExcel(string filePath)
+        public static async Task<List<ParkingLots>> LoadParkingLotsFromExcel(string filePath)
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             
@@ -221,7 +235,7 @@ namespace ParkingWork.Services
                             string.IsNullOrEmpty(name) || string.IsNullOrEmpty(isFree)) 
                             continue;
                         
-                        bool isTrueFalse = isFree == "1" ? true : false;
+                        bool isTrueFalse = isFree == "1";
 
                         var parking = await GetParkingName(Guid.Parse(parkingId), filePath);
 
@@ -240,38 +254,43 @@ namespace ParkingWork.Services
             return parkingLots;
         }
 
-        public async Task<string> GetParkingName(Guid parkingId, string filePath)
+        private static async Task<string> GetParkingName(Guid parkingId, string filePath)
         {
             var parkingName = string.Empty;
-            
+
             try
             {
-                using (var package = new ExcelPackage(new FileInfo(filePath)))
+                parkingName = await Task.Run(() =>
                 {
-                    var listName = "Parking";
-                    
-                    var worksheet = package.Workbook.Worksheets.FirstOrDefault(ws => ws.Name == listName);
-
-                    if (worksheet == null)
+                    using (var package = new ExcelPackage(new FileInfo(filePath)))
                     {
-                        ParkingException.ShowErrorMessage($"Лист с именем '{listName}' не найден");
-                        return parkingName;
-                    }
-                    
-                    int rowCount = worksheet.Dimension.Rows;
+                        var listName = "Parking";
 
-                    for (int row = 2; row <= rowCount; row++)
-                    {
-                        var id = worksheet.Cells[row, 1].Text; // Идентификатор
-                        var name = worksheet.Cells[row, 2].Text; // Название стоянки
+                        var worksheet = package.Workbook.Worksheets.FirstOrDefault(ws => ws.Name == listName);
 
-                        if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(name))
-                            continue;
-                        
-                        if (Guid.Parse(id) == parkingId)
-                            return name;
+                        if (worksheet == null)
+                        {
+                            ParkingException.ShowErrorMessage($"Лист с именем '{listName}' не найден");
+                            return string.Empty;
+                        }
+
+                        int rowCount = worksheet.Dimension.Rows;
+
+                        for (int row = 2; row <= rowCount; row++)
+                        {
+                            var id = worksheet.Cells[row, 1].Text; // Идентификатор
+                            var name = worksheet.Cells[row, 2].Text; // Название стоянки
+
+                            if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(name))
+                                continue;
+
+                            if (Guid.Parse(id) == parkingId)
+                                return name;
+                        }
                     }
-                }
+
+                    return string.Empty;
+                });
             }
             catch (Exception ex)
             {
@@ -285,43 +304,50 @@ namespace ParkingWork.Services
 
         #region Parkings
 
-        public async Task<List<Parkings>> LoadParkingFromExcel(string filePath)
+        public static async Task<List<Parkings>> LoadParkingFromExcel(string filePath)
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            
+
             var parkings = new List<Parkings>();
 
             try
             {
-                using (var package = new ExcelPackage(new FileInfo(filePath)))
+                parkings = await Task.Run(() =>
                 {
-                    var listName = "Parking";
-                    
-                    var worksheet = package.Workbook.Worksheets.FirstOrDefault(ws => ws.Name == listName);
+                    var localParkings = new List<Parkings>();
 
-                    if (worksheet == null)
+                    using (var package = new ExcelPackage(new FileInfo(filePath)))
                     {
-                        ParkingException.ShowErrorMessage($"Лист с именем '{listName}' не найден");
-                        return parkings;
+                        const string listName = "Parking";
+
+                        var worksheet = package.Workbook.Worksheets.FirstOrDefault(ws => ws.Name == listName);
+
+                        if (worksheet == null)
+                        {
+                            ParkingException.ShowErrorMessage($"Лист с именем '{listName}' не найден");
+                            return localParkings;
+                        }
+
+                        int rowCount = worksheet.Dimension.Rows;
+
+                        for (int row = 2; row <= rowCount; row++)
+                        {
+                            var id = worksheet.Cells[row, 1].Text; // Идентификатор
+                            var name = worksheet.Cells[row, 2].Text; // Название стоянки
+                            var address = worksheet.Cells[row, 3].Text; // Адрес
+                            var inn = worksheet.Cells[row, 4].Text; // Инн
+
+                            if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(name) || string.IsNullOrEmpty(address) || string.IsNullOrEmpty(inn))
+                                continue;
+
+                            var parking = new Parkings(Guid.Parse(id), name, address, BigInteger.Parse(inn));
+
+                            localParkings.Add(parking);
+                        }
                     }
-                    
-                    int rowCount = worksheet.Dimension.Rows;
 
-                    for (int row = 2; row <= rowCount; row++)
-                    {
-                        var id = worksheet.Cells[row, 1].Text; // Идентификатор
-                        var name = worksheet.Cells[row, 2].Text; // Название стоянки
-                        var address = worksheet.Cells[row, 3].Text; // Адрес
-                        var inn = worksheet.Cells[row, 4].Text; // Инн
-                        
-                        if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(name) || string.IsNullOrEmpty(address) || string.IsNullOrEmpty(inn))
-                            continue;
-
-                        var parking = new Parkings(Guid.Parse(id), name, address, BigInteger.Parse(inn));
-
-                        parkings.Add(parking);
-                    }
-                }
+                    return localParkings;
+                });
             }
             catch (Exception ex)
             {
@@ -335,51 +361,60 @@ namespace ParkingWork.Services
 
         #region Vehicles
 
-        public async Task<List<Vehicles>> LoadVehicleFromExcel(string filePath)
+        public static async Task<List<Vehicles>> LoadVehicleFromExcel(string filePath)
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            
+
             var vehicles = new List<Vehicles>();
 
             try
             {
-                using (var package = new ExcelPackage(new FileInfo(filePath)))
+                await Task.Run(() =>
                 {
-                    var listName = "Vehicles";
-                    
-                    var worksheet = package.Workbook.Worksheets.FirstOrDefault(ws => ws.Name == listName);
-
-                    if (worksheet == null)
+                    using (var package = new ExcelPackage(new FileInfo(filePath)))
                     {
-                        ParkingException.ShowErrorMessage($"Лист с именем '{listName}' не найден");
-                        return vehicles;
+                        var listName = "Vehicles";
+
+                        var worksheet = package.Workbook.Worksheets.FirstOrDefault(ws => ws.Name == listName);
+
+                        if (worksheet == null)
+                        {
+                            ParkingException.ShowErrorMessage($"Лист с именем '{listName}' не найден");
+                            return;
+                        }
+
+                        int rowCount = worksheet.Dimension.Rows;
+
+                        for (int row = 2; row <= rowCount; row++)
+                        {
+                            var id = worksheet.Cells[row, 1].Text; // Идентификатор
+                            var clientId = worksheet.Cells[row, 2].Text; // Клиент
+                            var licensePlate = worksheet.Cells[row, 3].Text; // Номер авто
+                            var brand = worksheet.Cells[row, 4].Text; // Бренд авто
+                            var model = worksheet.Cells[row, 5].Text; // Модель авто
+                            var color = worksheet.Cells[row, 6].Text; // Цвет авто
+
+                            if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(clientId) ||
+                                string.IsNullOrEmpty(licensePlate) || string.IsNullOrEmpty(brand) ||
+                                string.IsNullOrEmpty(model) || string.IsNullOrEmpty(color))
+                                continue;
+
+                            var intColor = int.Parse(color);
+                            var colorEnum = (VehicleColorEnums)intColor;
+
+                            var vehicle = new Vehicles(
+                                Guid.Parse(id),
+                                Guid.Parse(clientId),
+                                licensePlate,
+                                brand,
+                                model,
+                                colorEnum
+                            );
+
+                            vehicles.Add(vehicle);
+                        }
                     }
-                    
-                    int rowCount = worksheet.Dimension.Rows;
-
-                    for (int row = 2; row <= rowCount; row++)
-                    {
-                        var id = worksheet.Cells[row, 1].Text; // Идентификатор
-                        var clientId = worksheet.Cells[row, 2].Text; // Клиент
-                        var licensePlate = worksheet.Cells[row, 3].Text; // Номер авто
-                        var brand = worksheet.Cells[row, 4].Text; // Бренд авто
-                        var model = worksheet.Cells[row, 5].Text; // Модель авто
-                        var color = worksheet.Cells[row, 6].Text; // Цвет авто
-
-                        if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(clientId) ||
-                            string.IsNullOrEmpty(licensePlate) || string.IsNullOrEmpty(brand) ||
-                            string.IsNullOrEmpty(model) || string.IsNullOrEmpty(color)) 
-                            continue;
-
-                        var intColor = int.Parse(color);
-                        var colorEnum = (VehicleColorEnums)intColor;
-
-                        var vehicle = new Vehicles(Guid.Parse(id), Guid.Parse(clientId), licensePlate, brand, model,
-                            colorEnum);
-
-                        vehicles.Add(vehicle);
-                    }
-                }
+                });
             }
             catch (Exception ex)
             {
@@ -393,10 +428,9 @@ namespace ParkingWork.Services
 
         #region Receipts
 
-        public async Task<List<Receipts>> LoadReceiptFromExcel(string filePath, ObservableCollection<Owners> ownersList,
+        public static async Task<List<Receipts>> LoadReceiptFromExcel(string filePath, ObservableCollection<Owners> ownersList,
             ObservableCollection<Parkings> parkingList, ObservableCollection<ParkingLots> parkingLotsList,
             ObservableCollection<Attendants> attendantsList)
-
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
@@ -404,61 +438,75 @@ namespace ParkingWork.Services
 
             try
             {
-                using (var package = new ExcelPackage(new FileInfo(filePath)))
+                await Task.Run(() =>
                 {
-                    var listName = "Receipts";
-
-                    var worksheet = package.Workbook.Worksheets.FirstOrDefault(ws => ws.Name == listName);
-
-                    if (worksheet == null)
+                    using (var package = new ExcelPackage(new FileInfo(filePath)))
                     {
-                        ParkingException.ShowErrorMessage($"Лист с именем '{listName}' не найден");
-                        return receipts;
-                    }
+                        var listName = "Receipts";
 
-                    int rowCount = worksheet.Dimension.Rows;
+                        var worksheet = package.Workbook.Worksheets.FirstOrDefault(ws => ws.Name == listName);
 
-                    for (int row = 2; row <= rowCount; row++)
-                    {
-                        var id = worksheet.Cells[row, 1].Text;
-                        var series = worksheet.Cells[row, 2].Text;
-                        var number = worksheet.Cells[row, 3].Text;
-                        var ownerId = worksheet.Cells[row, 4].Text;
-                        var parkingId = worksheet.Cells[row, 5].Text;
-                        var parkinglotId = worksheet.Cells[row, 6].Text;
-                        var attendantsId = worksheet.Cells[row, 7].Text;
-                        var days = worksheet.Cells[row, 8].Text;
-                        var price = worksheet.Cells[row, 9].Text;
-                        var startdate = worksheet.Cells[row, 10].Text;
-                        var selectedcarid = worksheet.Cells[row, 11].Text;
-
-                        if (string.IsNullOrEmpty(id) ||
-                            string.IsNullOrEmpty(series) ||
-                            string.IsNullOrEmpty(number) ||
-                            string.IsNullOrEmpty(ownerId) ||
-                            string.IsNullOrEmpty(parkingId) ||
-                            string.IsNullOrEmpty(parkinglotId) ||
-                            string.IsNullOrEmpty(attendantsId) ||
-                            string.IsNullOrEmpty(days) ||
-                            string.IsNullOrEmpty(price) ||
-                            string.IsNullOrEmpty(startdate) ||
-                            string.IsNullOrEmpty(selectedcarid))
+                        if (worksheet == null)
                         {
-                            continue;
+                            ParkingException.ShowErrorMessage($"Лист с именем '{listName}' не найден");
+                            return;
                         }
-                        
-                        var ownerEntity = ownersList.FirstOrDefault(o => o.Id == Guid.Parse(ownerId));
-                        var parkingEntity = parkingList.FirstOrDefault(p => p.Id == Guid.Parse(parkingId));
-                        var parkingLotEntity = parkingLotsList.FirstOrDefault(p => p.Id == Guid.Parse(parkinglotId));
-                        var attendantsEntity = attendantsList.FirstOrDefault(p => p.Id == Guid.Parse(attendantsId));
 
-                        var receipt = new Receipts(Guid.Parse(id), series, number, ownerEntity, parkingEntity,
-                            parkingLotEntity, attendantsEntity, int.Parse(days), decimal.Parse(price),
-                            Guid.Parse(selectedcarid), DateTime.Parse(startdate));
+                        int rowCount = worksheet.Dimension.Rows;
 
-                        receipts.Add(receipt);
+                        for (int row = 2; row <= rowCount; row++)
+                        {
+                            var id = worksheet.Cells[row, 1].Text;
+                            var series = worksheet.Cells[row, 2].Text;
+                            var number = worksheet.Cells[row, 3].Text;
+                            var ownerId = worksheet.Cells[row, 4].Text;
+                            var parkingId = worksheet.Cells[row, 5].Text;
+                            var parkingLotId = worksheet.Cells[row, 6].Text;
+                            var attendantsId = worksheet.Cells[row, 7].Text;
+                            var days = worksheet.Cells[row, 8].Text;
+                            var price = worksheet.Cells[row, 9].Text;
+                            var startDate = worksheet.Cells[row, 10].Text;
+                            var selectedCarId = worksheet.Cells[row, 11].Text;
+
+                            if (string.IsNullOrEmpty(id) ||
+                                string.IsNullOrEmpty(series) ||
+                                string.IsNullOrEmpty(number) ||
+                                string.IsNullOrEmpty(ownerId) ||
+                                string.IsNullOrEmpty(parkingId) ||
+                                string.IsNullOrEmpty(parkingLotId) ||
+                                string.IsNullOrEmpty(attendantsId) ||
+                                string.IsNullOrEmpty(days) ||
+                                string.IsNullOrEmpty(price) ||
+                                string.IsNullOrEmpty(startDate) ||
+                                string.IsNullOrEmpty(selectedCarId))
+                            {
+                                continue;
+                            }
+
+                            var ownerEntity = ownersList.FirstOrDefault(o => o.Id == Guid.Parse(ownerId));
+                            var parkingEntity = parkingList.FirstOrDefault(p => p.Id == Guid.Parse(parkingId));
+                            var parkingLotEntity =
+                                parkingLotsList.FirstOrDefault(p => p.Id == Guid.Parse(parkingLotId));
+                            var attendantsEntity = attendantsList.FirstOrDefault(p => p.Id == Guid.Parse(attendantsId));
+
+                            var receipt = new Receipts(
+                                Guid.Parse(id),
+                                series,
+                                number,
+                                ownerEntity,
+                                parkingEntity,
+                                parkingLotEntity,
+                                attendantsEntity,
+                                int.Parse(days),
+                                decimal.Parse(price),
+                                Guid.Parse(selectedCarId),
+                                DateTime.Parse(startDate)
+                            );
+
+                            receipts.Add(receipt);
+                        }
                     }
-                }
+                });
             }
             catch (Exception ex)
             {

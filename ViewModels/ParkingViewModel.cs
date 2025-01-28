@@ -294,7 +294,7 @@ namespace ParkingWork.ViewModels
             var filePath = _filePath;
             if (File.Exists(filePath))
             {
-                var attendants = await _excelDataLoaderService.LoadAttendantsFromExcel(filePath);
+                var attendants = await ExcelDataLoaderService.LoadAttendantsFromExcel(filePath);
                 foreach (var attendant in attendants) Attendants.Add(attendant);
             }
             else
@@ -322,7 +322,7 @@ namespace ParkingWork.ViewModels
             var filePath = _filePath;
             if (File.Exists(filePath))
             {
-                var parkingLots = await _excelDataLoaderService.LoadParkingLotsFromExcel(filePath);
+                var parkingLots = await ExcelDataLoaderService.LoadParkingLotsFromExcel(filePath);
                 foreach (var parkingLot in parkingLots) ParkingLots.Add(parkingLot);
             }
             else
@@ -336,7 +336,7 @@ namespace ParkingWork.ViewModels
             var filePath = _filePath;
             if (File.Exists(filePath))
             {
-                var parkings = await _excelDataLoaderService.LoadParkingFromExcel(filePath);
+                var parkings = await ExcelDataLoaderService.LoadParkingFromExcel(filePath);
                 foreach (var parking in parkings) ParkingsCompany.Add(parking);
             }
             else
@@ -350,7 +350,7 @@ namespace ParkingWork.ViewModels
             var filePath = _filePath;
             if (File.Exists(filePath))
             {
-                var vehicles = await _excelDataLoaderService.LoadVehicleFromExcel(filePath);
+                var vehicles = await ExcelDataLoaderService.LoadVehicleFromExcel(filePath);
                 foreach (var vehicle in vehicles) Vehicles.Add(vehicle);
             }
             else
@@ -364,7 +364,7 @@ namespace ParkingWork.ViewModels
             var filePath = _filePath;
             if (File.Exists(filePath))
             {
-                var receipts = await _excelDataLoaderService.LoadReceiptFromExcel(filePath, Owners, ParkingsCompany,
+                var receipts = await ExcelDataLoaderService.LoadReceiptFromExcel(filePath, Owners, ParkingsCompany,
                     ParkingLots, Attendants);
                 foreach (var receipt in receipts) Receipts.Add(receipt);
             }

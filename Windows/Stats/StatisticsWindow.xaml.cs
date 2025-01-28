@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using ParkingWork.ViewModels;
 using ParkingWork.ViewModels.Stats;
 
 namespace ParkingWork.Windows.Stats
