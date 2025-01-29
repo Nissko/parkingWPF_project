@@ -54,13 +54,13 @@
         <StackPanel>
 
             <TextBlock Text="Название:" Style="{StaticResource ModernTextBlockStyle}" />
-            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
+            <TextBox PreviewTextInput="TextBox_ParkingName_Validate" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
 
             <TextBlock Text="Адрес:" Style="{StaticResource ModernTextBlockStyle}" />
-            <TextBox Text="{Binding Address, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
+            <TextBox PreviewTextInput="TextBox_Address_Validate" Text="{Binding Address, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
 
             <TextBlock Text="ИНН:" Style="{StaticResource ModernTextBlockStyle}" />
-            <TextBox Text="{Binding Inn, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
+            <TextBox Name="textBox_inn" PreviewTextInput="TextBox_Inn_Validate" Text="{Binding Inn, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
 
             <Button Content="Изменить" Command="{Binding ChangeCommand}" Style="{StaticResource ModernButtonStyle}" />
 

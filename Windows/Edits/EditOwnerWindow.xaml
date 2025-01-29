@@ -58,19 +58,19 @@
             <TextBlock Text="Информация о клиенте:" FontWeight="Bold" FontSize="16" Margin="0, 0, 0,15" />
 
             <TextBlock Text="Фамилия:" Style="{StaticResource ModernTextBlockStyle}" />
-            <TextBox Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
+            <TextBox PreviewTextInput="TextBox_FIO_Validate" Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
 
             <TextBlock Text="Имя:" Style="{StaticResource ModernTextBlockStyle}" />
-            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
+            <TextBox PreviewTextInput="TextBox_FIO_Validate" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
 
             <TextBlock Text="Отчество:" Style="{StaticResource ModernTextBlockStyle}" />
-            <TextBox Text="{Binding Patronymic, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
+            <TextBox PreviewTextInput="TextBox_FIO_Validate" Text="{Binding Patronymic, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
 
             <TextBlock Text="Адрес прописки:" Style="{StaticResource ModernTextBlockStyle}" />
-            <TextBox Text="{Binding Address, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
+            <TextBox PreviewTextInput="TextBox_Address_Validate" Text="{Binding Address, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
 
             <TextBlock Text="Номер телефона:" Style="{StaticResource ModernTextBlockStyle}" />
-            <TextBox Text="{Binding Phone, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
+            <TextBox Name="textBox_number" PreviewTextInput="TextBox_Phone_Validate" Text="{Binding Phone, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
 
             <TextBlock Text="Информация об автомобилях:" FontWeight="Bold" FontSize="16" Margin="0, 15, 0,15" />
 
@@ -78,13 +78,13 @@
             <TextBox Text="{Binding CarId, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" IsEnabled="False" Visibility="Collapsed" />
 
             <TextBlock Text="Марка:" Style="{StaticResource ModernTextBlockStyle}" />
-            <TextBox Text="{Binding Brand, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
+            <TextBox PreviewTextInput="TextBox_Brand_Validate" Text="{Binding Brand, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
 
             <TextBlock Text="Модель:" Style="{StaticResource ModernTextBlockStyle}" />
-            <TextBox Text="{Binding Model, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
+            <TextBox PreviewTextInput="TextBox_Model_Validate" Text="{Binding Model, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
 
             <TextBlock Text="Гос. номер авто:" Style="{StaticResource ModernTextBlockStyle}" />
-            <TextBox Text="{Binding LicensePlate, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
+            <TextBox PreviewTextInput="TextBox_LicensePlate_Validate" Text="{Binding LicensePlate, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
 
             <TextBlock Text="Цвет авто:" Style="{StaticResource ModernTextBlockStyle}" />
             <ComboBox SelectedItem="{Binding SelectedColorString}" Margin="0,0,0,10" >

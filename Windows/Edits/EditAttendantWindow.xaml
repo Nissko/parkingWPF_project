@@ -55,13 +55,13 @@
         <StackPanel>
 
             <TextBlock Text="Фамилия:" Style="{StaticResource ModernTextBlockStyle}" />
-            <TextBox Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
+            <TextBox PreviewTextInput="TextBox_FIO_Validate" Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
 
             <TextBlock Text="Имя:" Style="{StaticResource ModernTextBlockStyle}" />
-            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
+            <TextBox PreviewTextInput="TextBox_FIO_Validate" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
 
             <TextBlock Text="Отчество:" Style="{StaticResource ModernTextBlockStyle}" />
-            <TextBox Text="{Binding Patronymic, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
+            <TextBox PreviewTextInput="TextBox_FIO_Validate" Text="{Binding Patronymic, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
 
             <Button Content="Изменить" Command="{Binding ChangeCommand}" Width="100" HorizontalAlignment="Right" Style="{StaticResource ModernButtonStyle}" />
 

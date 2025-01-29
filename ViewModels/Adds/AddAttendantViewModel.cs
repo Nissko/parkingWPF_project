@@ -59,7 +59,8 @@ namespace ParkingWork.ViewModels.Adds
         {
             try
             {
-                if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(Surname) || string.IsNullOrEmpty(Patronymic))
+                if (string.IsNullOrEmpty(Name.Replace(" ", "")) || string.IsNullOrEmpty(Surname.Replace(" ", "")) ||
+                    string.IsNullOrEmpty(Patronymic.Replace(" ", "")))
                 {
                     ParkingException.ShowErrorMessage("Заполните все поля!");
                     return;

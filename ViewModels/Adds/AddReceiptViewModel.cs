@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using ParkingWork.Entities.Attendants;
+using ParkingWork.Entities.Attendant;
 using ParkingWork.Entities.Owner;
 using ParkingWork.Entities.Parking;
 using ParkingWork.Entities.Parking.Receipt;
@@ -182,10 +182,16 @@ namespace ParkingWork.ViewModels.Adds
                 _receiptsListToAdd.Clear();
 
                 if (SelectedParking == null || SelectedParkingLot == null || SelectedOwner == null ||
-                    SelectedAttendant == null || SelectedVehicle == null || string.IsNullOrEmpty(Days.ToString()) ||
-                    string.IsNullOrEmpty(Price))
+                    SelectedAttendant == null || SelectedVehicle == null || string.IsNullOrEmpty(Days.ToString().Replace(" ", "")) ||
+                    string.IsNullOrEmpty(Price.Replace(" ", "")))
                 {
                     ParkingException.ShowErrorMessage("Пожалуйста, заполните все поля.");
+                    return;
+                }
+
+                if (Days <= 0 || decimal.Parse(Price) <= 0)
+                {
+                    ParkingException.ShowErrorMessage("Пожалуйста, проверьте корректность ввода дней и цены.");
                     return;
                 }
 
@@ -269,7 +275,7 @@ namespace ParkingWork.ViewModels.Adds
                 if (newReceiptParking.Parking == null || newReceiptParking.ParkingLot == null ||
                     newReceiptParking.Owner == null || newReceiptParking.Attendants == null ||
                     newReceiptParking.Owner.Vehicles == null ||
-                    string.IsNullOrEmpty(newReceiptParking.Days.ToString()) || newReceiptParking.Price <= 0)
+                    string.IsNullOrEmpty(newReceiptParking.Days.ToString().Replace(" ", "")) || newReceiptParking.Price <= 0)
                 {
                     ParkingException.ShowErrorMessage("Нет всех данных в квитанции.");
                     return;

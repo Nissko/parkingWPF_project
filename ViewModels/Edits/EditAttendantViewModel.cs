@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using ParkingWork.Entities.Attendants;
+using ParkingWork.Entities.Attendant;
 using ParkingWork.Exceptions;
 using ParkingWork.Services;
 
@@ -75,8 +75,12 @@ namespace ParkingWork.ViewModels.Edits
         {
             try
             {
-                if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(Surname) || string.IsNullOrEmpty(Patronymic))
-                    throw new ArgumentNullException("Поля не могут быть пустыми");
+                if (string.IsNullOrEmpty(Name.Replace(" ", "")) || string.IsNullOrEmpty(Surname.Replace(" ", "")) ||
+                    string.IsNullOrEmpty(Patronymic.Replace(" ", "")))
+                {
+                    ParkingException.ShowErrorMessage("Поля не могут быть пустыми");
+                    return;
+                }
 
                 Attendants.FirstOrDefault(t => t.Id == _attendantChange.Id)?.ChangeAttendant(Name, Surname, Patronymic);
 

@@ -53,8 +53,8 @@
 
     <Grid Margin="10">
         <StackPanel>
-            <TextBlock Text="Наименование места:" Style="{StaticResource ModernTextBlockStyle}" />
-            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
+            <TextBlock Text="Место №:" Style="{StaticResource ModernTextBlockStyle}" />
+            <TextBox PreviewTextInput="TextBox_ParkingLot_Validate" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
 
             <TextBlock Text="Доступность:" Style="{StaticResource ModernTextBlockStyle}" />
             <ComboBox SelectedItem="{Binding IsFree, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" >

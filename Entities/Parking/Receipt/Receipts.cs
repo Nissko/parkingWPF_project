@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ParkingWork.Entities.Attendant;
 using ParkingWork.Entities.Owner;
 
 namespace ParkingWork.Entities.Parking.Receipt
@@ -11,7 +12,7 @@ namespace ParkingWork.Entities.Parking.Receipt
     public class Receipts
     {
         public Receipts(string series, string number, Owners owner, Parkings parking,
-            ParkingLots parkingLot, Attendants.Attendants attendants, int days, decimal price, Guid selectedCarId, DateTime? startDate = null)
+            ParkingLots parkingLot, Attendants attendants, int days, decimal price, Guid selectedCarId, DateTime? startDate = null)
         {
             Id = Guid.NewGuid();
             Series = series;
@@ -29,7 +30,7 @@ namespace ParkingWork.Entities.Parking.Receipt
         }
         
         public Receipts(Guid id, string series, string number, Owners owner, Parkings parking,
-            ParkingLots parkingLot, Attendants.Attendants attendants, int days, decimal price, Guid selectedCarId, DateTime? startDate = null)
+            ParkingLots parkingLot, Attendants attendants, int days, decimal price, Guid selectedCarId, DateTime? startDate = null)
         {
             Id = id;
             Series = series;
@@ -86,7 +87,7 @@ namespace ParkingWork.Entities.Parking.Receipt
         /// <summary>
         /// Кладовщик
         /// </summary>
-        public Attendants.Attendants Attendants { get; set; }
+        public Attendants Attendants { get; set; }
         
         /// <summary>
         /// Кол-во дней

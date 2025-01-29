@@ -1,5 +1,5 @@
 ﻿using System;
-using ParkingWork.Entities.Attendants;
+using ParkingWork.Entities.Attendant;
 using ParkingWork.Entities.Owner;
 using ParkingWork.Entities.Parking;
 using ParkingWork.Entities.Parking.Receipt;

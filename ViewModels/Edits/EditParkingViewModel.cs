@@ -75,8 +75,12 @@ namespace ParkingWork.ViewModels.Edits
         {
             try
             {
-                if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(Address) || string.IsNullOrEmpty(Inn.ToString()))
-                    throw new ArgumentNullException("Поля не могут быть пустыми");
+                if (string.IsNullOrEmpty(Name.Replace(" ", "")) || string.IsNullOrEmpty(Address.Replace(" ", "")) ||
+                    string.IsNullOrEmpty(Inn.ToString().Replace(" ", "")))
+                {
+                    ParkingException.ShowErrorMessage("Поля не могут быть пустыми");
+                    return;
+                }
 
                 Parkings.FirstOrDefault(t => t.Id == _parkingChange.Id)
                     ?.ChangeParking(Name, Address, BigInteger.Parse(Inn));

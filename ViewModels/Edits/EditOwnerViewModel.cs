@@ -103,7 +103,7 @@ namespace ParkingWork.ViewModels.Edits
                 OnPropertyChanged(nameof(SelectedColor));
             }
         }
-        
+
         private string _selectedColorString;
 
         public string SelectedColorString
@@ -155,12 +155,19 @@ namespace ParkingWork.ViewModels.Edits
                 ParkingException.ShowErrorMessage("Не выбрана машина");
                 return;
             }
-            
+
             var carSelected = Cars.FirstOrDefault(x => x.Id == Guid.Parse(CarId));
 
             if (carSelected != null)
             {
-                carSelected.ChangeVehicle(LicensePlate, Brand, Model, SelectedColor);
+                if (string.IsNullOrEmpty(LicensePlate.Replace(" ", "")) ||
+                    string.IsNullOrEmpty(Brand.Replace(" ", "")) || string.IsNullOrEmpty(Model.Replace(" ", ""))) 
+                {
+                    ParkingException.ShowErrorMessage("Изменяемые поля не могут быть пустыми");
+                    return;
+                }
+
+                carSelected.ChangeVehicle(LicensePlate.Replace(" ", ""), Brand, Model, SelectedColor);
 
                 var index = Cars.IndexOf(SelectedCar);
                 if (index >= 0)
@@ -168,6 +175,8 @@ namespace ParkingWork.ViewModels.Edits
                     Cars[index] = null;
                     Cars[index] = carSelected;
                 }
+
+                LicensePlate = LicensePlate.Replace(" ", "");
 
                 OnPropertyChanged(nameof(Cars));
             }
@@ -177,9 +186,14 @@ namespace ParkingWork.ViewModels.Edits
         {
             try
             {
-                if (string.IsNullOrEmpty(Surname) || string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(Patronymic) ||
-                    string.IsNullOrEmpty(Address) || string.IsNullOrEmpty(Phone) || Cars.Count == 0)
-                    throw new Exception("Поля не могут быть пустыми");
+                if (string.IsNullOrEmpty(Surname.Replace(" ", "")) || string.IsNullOrEmpty(Name.Replace(" ", "")) ||
+                    string.IsNullOrEmpty(Patronymic.Replace(" ", "")) ||
+                    string.IsNullOrEmpty(Address.Replace(" ", "")) || string.IsNullOrEmpty(Phone.Replace(" ", "")) ||
+                    Cars.Count == 0)
+                {
+                    ParkingException.ShowErrorMessage("Поля не могут быть пустыми");
+                    return;
+                }
 
                 OwnersList.FirstOrDefault(t => t.Id == _ownerChange.Id)
                     ?.ChangeOwner(Name, Surname, Patronymic, Address, Phone, Cars);

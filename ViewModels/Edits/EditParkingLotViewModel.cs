@@ -14,6 +14,7 @@ namespace ParkingWork.ViewModels.Edits
     {
         private string _name;
         private string _isFree;
+        private string _oldParkingLotNumber;
 
         public string Name
         {
@@ -51,8 +52,9 @@ namespace ParkingWork.ViewModels.Edits
             _parkingLotChange = parkingToChange;
             _parkingLotService = parkingService;
             ParkingLots = parkings;
+            _oldParkingLotNumber = parkingToChange.Name.Replace("Место №", "");
 
-            Name = _parkingLotChange.Name;
+            Name = _parkingLotChange.Name.Replace("Место №", "");
             IsFree = _parkingLotChange.IsFree == true ? "Свободно" : "Занято";
             
             ChangeCommand = new RelayCommand(Change);
@@ -63,8 +65,10 @@ namespace ParkingWork.ViewModels.Edits
         {
             try
             {
-                if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(IsFree))
-                    throw new ArgumentNullException("Поля не могут быть пустыми");
+                var validate = ValidateParkingLot();
+                if (!validate) return;
+
+                _name = $"Место №{Name}";
 
                 ParkingLots.FirstOrDefault(t => t.Id == _parkingLotChange.Id)
                     ?.ChangeParkingLot(Name, IsFree == "Свободно" ? true : false);
@@ -85,6 +89,26 @@ namespace ParkingWork.ViewModels.Edits
         private void RedirectBack(object parameter)
         {
             Application.Current.Windows[1]?.Close();
+        }
+        
+        public bool ValidateParkingLot()
+        {
+            if (string.IsNullOrEmpty(Name.Replace(" ", "")) || string.IsNullOrEmpty(IsFree.Replace(" ", "")))
+            {
+                ParkingException.ShowErrorMessage("Поля не могут быть пустыми");
+                return false;
+            }
+
+            var parkingLot = ParkingLots.Where(t => t.ParkingId == _parkingLotChange.ParkingId);
+
+            if (Name.Replace("Место №", "") != _oldParkingLotNumber &&
+                parkingLot.Any(t => t.Name.Replace("Место №", "") == Name))
+            {
+                ParkingException.ShowErrorMessage("Введенный номер парковки уже существует, введите другой номер!");
+                return false;
+            }
+
+            return true;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

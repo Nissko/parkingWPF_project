@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Microsoft.Win32;
-using ParkingWork.Entities.Attendants;
+using ParkingWork.Entities.Attendant;
 using ParkingWork.Entities.Owner;
 using ParkingWork.Entities.Parking;
 using ParkingWork.Entities.Parking.Receipt;
@@ -413,7 +413,7 @@ namespace ParkingWork.ViewModels
         /// </summary>
         private void OpenAddParkingLotWindow(object parameter)
         {
-            var viewModel = new AddParkingLotViewModel(_parkingLotService, ParkingsCompany);
+            var viewModel = new AddParkingLotViewModel(_parkingLotService, ParkingsCompany, ParkingLots);
             var window = new AddParkingLotWindow(viewModel);
             window.ShowDialog();
         }

@@ -60,7 +60,8 @@ namespace ParkingWork.ViewModels.Adds
         {
             try
             {
-                if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(Address) || string.IsNullOrEmpty(Inn))
+                if (string.IsNullOrEmpty(Name.Replace(" ", "")) || string.IsNullOrEmpty(Address.Replace(" ", "")) ||
+                    string.IsNullOrEmpty(Inn.Replace(" ", ""))) 
                 {
                     ParkingException.ShowErrorMessage("Заполните все поля!");
                     return;

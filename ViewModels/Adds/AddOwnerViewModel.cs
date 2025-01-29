@@ -87,14 +87,16 @@ namespace ParkingWork.ViewModels.Adds
 
         private void AddCar(object parameter)
         {
-            if (string.IsNullOrEmpty(LicensePlate) || string.IsNullOrEmpty(Brand) || string.IsNullOrEmpty(Model) ||
-                string.IsNullOrEmpty(_selectedColor.ToString()))
+            if (string.IsNullOrEmpty(LicensePlate.Replace(" ", "")) || string.IsNullOrEmpty(Brand.Replace(" ", "")) ||
+                string.IsNullOrEmpty(Model.Replace(" ", "")) ||
+                string.IsNullOrEmpty(_selectedColor.ToString().Replace(" ", ""))) 
             {
                 ParkingException.ShowErrorMessage("Невозможно добавить авто! Заполните все поля!");
                 return;
             }
 
-            Cars.Add(new Vehicles(Guid.NewGuid(), _newClientId, LicensePlate, Brand, Model, _selectedColor));
+            Cars.Add(new Vehicles(Guid.NewGuid(), _newClientId, LicensePlate.Replace(" ", ""), Brand, Model,
+                _selectedColor));
 
             // Очистка формы
             Brand = string.Empty;
@@ -107,9 +109,11 @@ namespace ParkingWork.ViewModels.Adds
         {
             try
             {
-                if (_newClientId == Guid.Empty || string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(Surname) ||
-                    string.IsNullOrEmpty(Patronymic) || string.IsNullOrEmpty(Address) || string.IsNullOrEmpty(Phone) ||
-                    Cars.Count == 0)
+                if (_newClientId == Guid.Empty || string.IsNullOrEmpty(Name.Replace(" ", "")) ||
+                    string.IsNullOrEmpty(Surname.Replace(" ", "")) ||
+                    string.IsNullOrEmpty(Patronymic.Replace(" ", "")) ||
+                    string.IsNullOrEmpty(Address.Replace(" ", "")) || string.IsNullOrEmpty(Phone.Replace(" ", "")) ||
+                    Cars.Count == 0) 
                 {
                     ParkingException.ShowErrorMessage("Заполните все поля!");
                     return;

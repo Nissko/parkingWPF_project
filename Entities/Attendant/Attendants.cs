@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ParkingWork.Entities.Attendants
+namespace ParkingWork.Entities.Attendant
 {
     /// <summary>
     /// Кладовщик
