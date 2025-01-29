@@ -501,7 +501,7 @@ namespace ParkingWork.ViewModels
         /// <summary>
         /// Печать квитанции
         /// </summary>
-        private void PrintReceipt(object parameter)
+        private async void PrintReceipt(object parameter)
         {
             if (!(parameter is Receipts receipt)) return;
 
@@ -538,8 +538,8 @@ namespace ParkingWork.ViewModels
             };
 
             var wordService = new WordService();
-            var outputWordPath = wordService.GenerateReceipt(tags);
-            var pdfFilePath = wordService.ConvertWordToPdf(outputWordPath);
+            var outputWordPath = await Task.Run(() => wordService.GenerateReceipt(tags));
+            var pdfFilePath = await Task.Run(() => wordService.ConvertWordToPdf(outputWordPath));
 
             var saveFileDialog = new SaveFileDialog
             {

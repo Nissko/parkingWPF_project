@@ -248,8 +248,8 @@ namespace ParkingWork.ViewModels.Adds
                 #endregion
 
                 var wordService = new WordService();
-                var outputWordPath = wordService.GenerateReceipt(tags);
-                var outputPath = wordService.ConvertWordToPdf(outputWordPath);
+                var outputWordPath = await Task.Run(() => wordService.GenerateReceipt(tags));
+                var outputPath = await Task.Run(() => wordService.ConvertWordToPdf(outputWordPath));
 
                 var currentWindow = Application.Current.Windows[1] as AddReceiptWindow;
                 currentWindow?.ShowPdfInWebBrowser(outputPath);
