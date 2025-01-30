@@ -9,48 +9,48 @@
         DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Window.Resources>
         <Style x:Key="ModernButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="#FF1E90FF"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Background" Value="#FF1E90FF" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="Width" Value="200px" />
             <Setter Property="Height" Value="25px" />
-            <Setter Property="Padding" Value="20 15"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="HorizontalAlignment" Value="Left"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Padding" Value="20 15" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Cursor" Value="Hand" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" 
-                                CornerRadius="5" 
-                                BorderThickness="{TemplateBinding BorderThickness}" 
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="5"
+                                BorderThickness="{TemplateBinding BorderThickness}"
                                 BorderBrush="{TemplateBinding BorderBrush}">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="OverridesDefaultStyle" Value="True" />
             <Setter Property="Effect">
                 <Setter.Value>
-                    <DropShadowEffect ShadowDepth="2" Opacity="0.5"/>
+                    <DropShadowEffect ShadowDepth="2" Opacity="0.5" />
                 </Setter.Value>
             </Setter>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#FF007ACC"/>
+                    <Setter Property="Background" Value="#FF007ACC" />
                 </Trigger>
             </Style.Triggers>
         </Style>
 
         <Style x:Key="ModernTextBlockStyle" TargetType="TextBlock">
-            <Setter Property="FontFamily" Value="Segoe UI"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Foreground" Value="#333333"/>
-            <Setter Property="TextWrapping" Value="Wrap"/>
-            <Setter Property="Padding" Value="0, 5, 0, 5"/>
+            <Setter Property="FontFamily" Value="Segoe UI" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Foreground" Value="#333333" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="Padding" Value="0, 5, 0, 5" />
         </Style>
     </Window.Resources>
 
@@ -78,8 +78,9 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Margin="5">
-                                <TextBlock Text="{Binding ContactInformation}" Style="{StaticResource ModernTextBlockStyle}" />
-                                <Button Style="{StaticResource ModernButtonStyle}" Content="Изменить" 
+                                <TextBlock Text="{Binding ContactInformation}"
+                                           Style="{StaticResource ModernTextBlockStyle}" />
+                                <Button Style="{StaticResource ModernButtonStyle}" Content="Изменить"
                                         Command="{Binding DataContext.EditOwnerCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                         CommandParameter="{Binding}" />
                             </StackPanel>
@@ -88,12 +89,14 @@
                 </ListBox>
             </TabItem>
             <TabItem Header="Стоянки">
-                <ListBox ItemsSource="{Binding ParkingsCompany}" Margin="10" Background="Transparent" BorderThickness="0">
+                <ListBox ItemsSource="{Binding ParkingsCompany}" Margin="10" Background="Transparent"
+                         BorderThickness="0">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Margin="5">
-                                <TextBlock Text="{Binding ContactInformation}" Style="{StaticResource ModernTextBlockStyle}" />
-                                <Button Style="{StaticResource ModernButtonStyle}" Content="Изменить" 
+                                <TextBlock Text="{Binding ContactInformation}"
+                                           Style="{StaticResource ModernTextBlockStyle}" />
+                                <Button Style="{StaticResource ModernButtonStyle}" Content="Изменить"
                                         Command="{Binding DataContext.EditParkingCompanyCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                         CommandParameter="{Binding}" />
                             </StackPanel>
@@ -106,8 +109,9 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Margin="5">
-                                <TextBlock Text="{Binding NormalizedName}" Style="{StaticResource ModernTextBlockStyle}" />
-                                <Button Style="{StaticResource ModernButtonStyle}" Content="Изменить" 
+                                <TextBlock Text="{Binding NormalizedName}"
+                                           Style="{StaticResource ModernTextBlockStyle}" />
+                                <Button Style="{StaticResource ModernButtonStyle}" Content="Изменить"
                                         Command="{Binding DataContext.EditParkingLotCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                         CommandParameter="{Binding}" />
                             </StackPanel>
@@ -121,7 +125,7 @@
                         <DataTemplate>
                             <StackPanel Margin="5">
                                 <TextBlock Text="{Binding FullName}" Style="{StaticResource ModernTextBlockStyle}" />
-                                <Button Style="{StaticResource ModernButtonStyle}" Content="Изменить" 
+                                <Button Style="{StaticResource ModernButtonStyle}" Content="Изменить"
                                         Command="{Binding DataContext.EditAttendantCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                         CommandParameter="{Binding}" />
                             </StackPanel>
@@ -130,29 +134,34 @@
                 </ListBox>
             </TabItem>
             <TabItem Header="Квитанция">
-                <StackPanel>
-                    <TextBlock Margin="5" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" 
-                               Text="ОКНО ДЛЯ РАБОТЫ С КВИТАНЦИЯМИ" Style="{StaticResource ModernTextBlockStyle}" />
-                    <Grid Margin="10 5 10 5 ">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Style="{StaticResource ModernButtonStyle}" Content="Создать квитанцию" 
-                                Command="{Binding AddReceiptCommand}" Margin="10" />
-                    </Grid>
-                    <ListBox ItemsSource="{Binding Receipts}" Margin="10" Background="Transparent" BorderThickness="0">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Margin="5">
-                                    <TextBlock Text="{Binding FullInfoReceiptString}" Style="{StaticResource ModernTextBlockStyle}" />
-                                    <Button Style="{StaticResource ModernButtonStyle}" Content="Вывести на печать" 
-                                            Command="{Binding DataContext.PrintReceiptCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                            CommandParameter="{Binding}" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </StackPanel>
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <TextBlock Margin="5" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                   Text="ОКНО ДЛЯ РАБОТЫ С КВИТАНЦИЯМИ" Style="{StaticResource ModernTextBlockStyle}" />
+                        <Grid Margin="10 5 10 5 ">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" Style="{StaticResource ModernButtonStyle}"
+                                    Content="Создать квитанцию"
+                                    Command="{Binding AddReceiptCommand}" Margin="10" />
+                        </Grid>
+                        <ListBox ItemsSource="{Binding Receipts}" Margin="10" Background="Transparent"
+                                 BorderThickness="0">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="5">
+                                        <TextBlock Text="{Binding FullInfoReceiptString}"
+                                                   Style="{StaticResource ModernTextBlockStyle}" />
+                                        <Button Style="{StaticResource ModernButtonStyle}" Content="Вывести на печать"
+                                                Command="{Binding DataContext.PrintReceiptCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                CommandParameter="{Binding}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </StackPanel>
+                </ScrollViewer>
             </TabItem>
         </TabControl>
     </Grid>
